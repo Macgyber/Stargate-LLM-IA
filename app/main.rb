@@ -318,20 +318,33 @@ def tick(args)
     args.outputs.sprites << args.state.explosions.map { |e| e.merge(x: e.x + sx) }
     args.outputs.solids << args.state.bullets
     
-    # UI
-    if args.state.boss
-        # Background for Health Bar (Black for contrast)
-        args.outputs.solids << { x: 440, y: 680, w: 400, h: 15, r: 0, g: 0, b: 0 }
-        # Progress Bar (Red)
-        bar_width = ((args.state.boss.hp || 200) / 200.0) * 400
-        args.outputs.solids << { x: 440, y: 680, w: bar_width, h: 15, r: 255, g: 50, b: 50 }
-        # Border (White)
-        args.outputs.borders << { x: 440, y: 680, w: 400, h: 15, r: 255, g: 255, b: 255 }
-        # Label
-        args.outputs.labels << { x: 640, y: 650, text: "SOVEREIGN DRAGON", alignment_enum: 1, r: 255, g: 100, b: 100, font: "fonts/manaspc.ttf" }
+    # UI (Boss HP Bar) - Floating above Boss
+    if args.state.boss && args.state.scene == :boss_battle
+        # Ensure HP is initialized for safety
+        args.state.boss.hp ||= 200
         
+        # Position relative to Boss
+        bx = args.state.boss.x + sx # Include shake logic if needed
+        by = args.state.boss.y + args.state.boss.h + 20 # Above head
+        
+        # Health Calculation
+        pct = (args.state.boss.hp / 200.0).clamp(0, 1)
+        bar_w = 200 * pct # Smaller width to fit boss size
+        
+        # Bar Color (Green -> Yellow -> Red)
+        r, g, b = 255, 50, 50
+        if pct > 0.5; r = 50; g = 255; b = 50; end
+        
+        # Background
+        args.outputs.solids << { x: bx + 125, y: by, w: 200, h: 10, r: 0, g: 0, b: 0 }
+        # Render Bar
+        args.outputs.solids << { x: bx + 125, y: by, w: bar_w, h: 10, r: r, g: g, b: b }
+        # Border
+        args.outputs.borders << { x: bx + 125, y: by, w: 200, h: 10, r: 255, g: 255, b: 255 }
+        
+        # Trigger Outro on Death
         if args.state.boss.hp <= 0; force_scene_switch(args, :outro); end
-    else
+    elsif args.state.scene == :boss_battle
         args.outputs.labels << { x: 640, y: 680, text: "ASTEROIDS: #{args.state.asteroids_destroyed}/10", alignment_enum: 1, r: 100, g: 255, b: 255 }
     end
 

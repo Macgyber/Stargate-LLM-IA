@@ -16,7 +16,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 366-408
+      - 373-415
     primary_responsibility: Movie Aesthetic
 
   presentation.transition:
@@ -24,7 +24,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 374-404
+      - 381-411
     primary_responsibility: Fluid Scene Swapping
 
   presentation.scene.intro:
@@ -32,7 +32,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 18-39
+      - 17-43
     primary_responsibility: Atmosphere & Audio Start
 
   presentation.scene.epic_quotes:
@@ -40,7 +40,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 41-82
+      - 44-86
     primary_responsibility: Philosophy & Lore
 
   presentation.scene.countdown:
@@ -48,7 +48,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 84-100
+      - 87-104
     primary_responsibility: Narrative Pacing
 
   presentation.scene.cars:
@@ -56,7 +56,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 102-165
+      - 105-170
     primary_responsibility: Gameplay 1 (Action)
 
   presentation.scene.interlude:
@@ -64,7 +64,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 167-185
+      - 171-189
     primary_responsibility: Tension Building
 
   presentation.scene.boss_battle:
@@ -72,7 +72,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 187-329
+      - 190-337
     primary_responsibility: Climax Gameplay
 
   presentation.scene.outro:
@@ -80,7 +80,7 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 331-364
+      - 338-372
     primary_responsibility: Closure & Creative Replay
 
   system.scene_management:
@@ -88,5 +88,6 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 410-434
+      - 417-441
     primary_responsibility: Sequencing & Resource Cleanup
+    
