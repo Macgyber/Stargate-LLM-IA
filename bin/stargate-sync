@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'yaml'
+
+# Paths
+PROJECT_ROOT = File.expand_path('..', __dir__)
+SRC_MAIN     = File.join(PROJECT_ROOT, 'app', 'main.rb')
+DEST_MAIN    = File.join(PROJECT_ROOT, 'SDK-DR', 'mygame', 'app', 'main.rb')
+INDEX_PATH   = File.join(PROJECT_ROOT, '.causal', 'index.yaml')
+
+# Helper: Read file safe
+def read_safe(path)
+  File.exist?(path) ? File.read(path) : ""
+end
+
+puts "🌀 Stargate-LLM-IA: Synchronizing State..."
+
+# 1. Sync Code to Runtime (SDK-DR)
+# ---------------------------------------------------------
+if File.exist?(SRC_MAIN)
+  FileUtils.mkdir_p(File.dirname(DEST_MAIN))
+  FileUtils.cp(SRC_MAIN, DEST_MAIN)
+  puts "   ✅ Runtime Synced: app/main.rb -> SDK-DR/mygame/app/main.rb"
+else
+  puts "   ❌ Error: app/main.rb not found."
+  exit 1
+end
+
+# 2. Check Parity (Empty Code <-> Empty Index)
+# ---------------------------------------------------------
+code_content = read_safe(SRC_MAIN)
+# We define "Empty Code" as having only the Stargate bootstrap or very few lines
+is_code_empty = code_content.lines.count < 30 && code_content.include?("Stargate.activate!")
+
+if is_code_empty
+  puts "   🔍 Detected 'Empty' Bootstrap Code."
+  
+  # Read Index
+  if File.exist?(INDEX_PATH)
+    index = YAML.load_file(INDEX_PATH)
+    node_count = index['nodes']&.count || 0
+    
+    # If Code is empty but Index has many nodes (more than just system.core)
+    if node_count > 2 # allowing system.core and maybe one other
+      puts "   ⚠️  Mismatch: Code is empty but Index has #{node_count} nodes."
+      puts "   🧹 Cleaning Index to match Code State..."
+      
+      # Reset Index to Minimal
+      minimal_index = {
+        "version" => "1.0.0",
+        "last_updated" => Time.now.strftime("%Y-%m-%d"),
+        "context" => "Stargate Bootstrap",
+        "nodes" => {
+          "system.core" => {
+            "description" => "Runtime entry point and Stargate activation",
+            "files" => [{"path" => "app/main.rb", "ranges" => ["1-10"]}],
+            "primary_responsibility" => "Boot"
+          }
+        }
+      }
+      
+      File.write(INDEX_PATH, minimal_index.to_yaml)
+      puts "   ✅ Index Reset: Nodes cleared."
+    else
+      puts "   ✅ Parity OK: Index is also minimal."
+    end
+  end
+else
+  puts "   ℹ️  Code contains logic. Skipping Index auto-reset."
+end
+
+puts "   ✅ Sync Complete."

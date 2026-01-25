@@ -1,0 +1,84 @@
+---
+version: 1.1.1
+last_updated: '2026-01-25'
+context: Stargate Demo (Cinematic Trailer Version)
+nodes:
+  system.core:
+    description: Runtime entry point, Stargate activation, and Causal Sentinel
+    files:
+    - path: app/main.rb
+      ranges:
+      - 1-15
+    primary_responsibility: Boot
+  
+  presentation.trailer_fx:
+    description: Global Cinematic Layer (Letterboxing, Shake, Flash overlays)
+    files:
+    - path: app/main.rb
+      ranges:
+      - 376-386
+    primary_responsibility: Movie Aesthetic
+
+  presentation.scene.intro:
+    description: Analog Static start - Triggers controlled audio (:bgm) on click
+    files:
+    - path: app/main.rb
+      ranges:
+      - 18-39
+    primary_responsibility: Atmosphere & Audio Start
+
+  presentation.scene.epic_quotes:
+    description: Scripted narrative with bilingual cinematic subtitles
+    files:
+    - path: app/main.rb
+      ranges:
+      - 41-82
+    primary_responsibility: Philosophy & Lore
+
+  presentation.scene.countdown:
+    description: Dramatic flash countdown
+    files:
+    - path: app/main.rb
+      ranges:
+      - 84-100
+    primary_responsibility: Narrative Pacing
+
+  presentation.scene.cars:
+    description: Formula 1 high-speed chase (120 KM/H constant)
+    files:
+    - path: app/main.rb
+      ranges:
+      - 102-165
+    primary_responsibility: Gameplay 1 (Action)
+
+  presentation.scene.interlude:
+    description: Cinematic bridge transition
+    files:
+    - path: app/main.rb
+      ranges:
+      - 167-185
+    primary_responsibility: Tension Building
+
+  presentation.scene.boss_battle:
+    description: Climax Battle vs Dragon
+    files:
+    - path: app/main.rb
+      ranges:
+      - 187-356
+    primary_responsibility: Climax Gameplay
+
+  presentation.scene.outro:
+    description: Philosophical closure
+    files:
+    - path: app/main.rb
+      ranges:
+      - 358-374
+    primary_responsibility: Closure & Creative Replay
+
+  system.scene_management:
+    description: Transition logic, state cleanup, and audio termination
+    files:
+    - path: app/main.rb
+      ranges:
+      - 388-404
+    primary_responsibility: Sequencing & Resource Cleanup
