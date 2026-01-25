@@ -1,14 +1,14 @@
 ---
-version: 1.1.1
+version: 1.2.3
 last_updated: '2026-01-25'
-context: Stargate Demo (Cinematic Trailer Version)
+context: Stargate Demo (Readability & Layout Patch)
 nodes:
   system.core:
     description: Runtime entry point, Stargate activation, and Causal Sentinel
     files:
     - path: app/main.rb
       ranges:
-      - 1-15
+      - 1-16
     primary_responsibility: Boot
   
   presentation.trailer_fx:
@@ -16,8 +16,16 @@ nodes:
     files:
     - path: app/main.rb
       ranges:
-      - 376-386
+      - 366-408
     primary_responsibility: Movie Aesthetic
+
+  presentation.transition:
+    description: Rive-style procedural curtain transition with midpoint state swap
+    files:
+    - path: app/main.rb
+      ranges:
+      - 374-404
+    primary_responsibility: Fluid Scene Swapping
 
   presentation.scene.intro:
     description: Analog Static start - Triggers controlled audio (:bgm) on click
@@ -44,7 +52,7 @@ nodes:
     primary_responsibility: Narrative Pacing
 
   presentation.scene.cars:
-    description: Formula 1 high-speed chase (120 KM/H constant)
+    description: Formula 1 high-speed chase with track boundary fix
     files:
     - path: app/main.rb
       ranges:
@@ -60,25 +68,25 @@ nodes:
     primary_responsibility: Tension Building
 
   presentation.scene.boss_battle:
-    description: Climax Battle vs Dragon
+    description: Climax Battle vs Dragon. Corrected HP/UI sizing.
     files:
     - path: app/main.rb
       ranges:
-      - 187-356
+      - 187-329
     primary_responsibility: Climax Gameplay
 
   presentation.scene.outro:
-    description: Philosophical closure
+    description: Philosophical closure. Layout optimized for logo/text readability.
     files:
     - path: app/main.rb
       ranges:
-      - 358-374
+      - 331-364
     primary_responsibility: Closure & Creative Replay
 
   system.scene_management:
-    description: Transition logic, state cleanup, and audio termination
+    description: Transition trigger and internal state swap logic
     files:
     - path: app/main.rb
       ranges:
-      - 388-404
+      - 410-434
     primary_responsibility: Sequencing & Resource Cleanup

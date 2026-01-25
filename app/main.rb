@@ -20,9 +20,13 @@ def tick(args)
     args.outputs.sprites << { x: 640 - 75, y: 360 - 75, w: 150, h: 150, path: 'metadata/icon.png', a: 100 }
     
     # Trailer-style Analog Static (Procedural Noise)
-    args.state.static ||= 20.map { { x: rand(1280), y: rand(720), w: 2, h: 2, r: 255, g: 255, b: 255, a: 50 } }
-    args.state.static.each { |s| s.x = rand(1280); s.y = rand(720) }
-    args.outputs.solids << args.state.static
+    if args.state.tick_count > 0
+      if !args.state.static
+         args.state.static = 20.map { { x: 0, y: 0, w: 2, h: 2, r: 255, g: 255, b: 255, a: 50 } }
+      end
+      args.state.static.each { |s| s.x = rand(1280); s.y = rand(720) }
+      args.outputs.solids << args.state.static
+    end
 
     # Pulsing Prompt
     scale = 1 + Math.sin(args.state.tick_count / 15) * 0.05
@@ -213,54 +217,22 @@ def tick(args)
 
     # --- PHASE 1: ASTEROID FIELD (Chaos) ---
     if !args.state.boss
-      # Spawn more erratic asteroids
-      if args.state.tick_count % 20 == 0 # Faster spawn rate
-        size = 80 + rand(70) # Larger: 80 to 150
-        speed = 8 + rand(12) # Faster: 8 to 20
-        spin = (rand(10) - 5) * 2 # Fast rotation
-        dy = (rand(6) - 3) # Vertical drift
-        args.state.asteroids << { 
-          x: 1300, y: rand(720), 
-          w: size, h: size, 
-          path: 'images/rock.png', 
-          speed: speed, 
-          dy: dy,
-          angle: rand(360), 
-          rot_speed: spin 
-        }
+      if args.state.tick_count % 20 == 0
+        size = 80 + rand(70); speed = 8 + rand(12); spin = (rand(10) - 5) * 2; dy = (rand(6) - 3)
+        args.state.asteroids << { x: 1300, y: rand(720), w: size, h: size, path: 'images/rock.png', speed: speed, dy: dy, angle: rand(360), rot_speed: spin }
       end
-      
-      # Spawn Boss Condition
       if args.state.asteroids_destroyed >= 10
-        # Music started at Intro interaction
-        
-        args.state.boss = { 
-          x: 1300, y: 300, w: 450, h: 450, 
-          path: 'images/dragon.png', 
-          hp: 200, # Reduced back to 200 for demo speed
-          dir: 1, 
-          flip_horizontally: false,
-          r: 255, g: 255, b: 255,
-          fire_timer: 100,
-          move_timer: 0,
-          target_y: 360
-        }
-        args.state.asteroids.clear 
-        args.state.flash = 255
-        args.state.shake = 30
+        # Inicialización Boss
+        args.state.boss = { x: 1300, y: 300, w: 450, h: 450, path: 'images/dragon.png', hp: 200, dir: 1, flip_horizontally: false, r: 255, g: 255, b: 255, fire_timer: 100, move_timer: 0, target_y: 360 }
+        args.state.asteroids.clear; args.state.flash = 255; args.state.shake = 30
       end
     end
     
     # --- PHASE 2: BOSS BATTLE (Unpredictable) ---
     if args.state.boss
-      # Boss Movement
       args.state.boss.move_timer -= 1
-      if args.state.boss.move_timer <= 0
-         args.state.boss.target_y = 100 + rand(500) # New random target Y
-         args.state.boss.move_timer = 60 + rand(60) # Reset timer
-      end
-      y_diff = args.state.boss.target_y - args.state.boss.y
-      args.state.boss.y += y_diff * 0.05 # Smoothly move towards target
+      if args.state.boss.move_timer <= 0; args.state.boss.target_y = 100 + rand(500); args.state.boss.move_timer = 60 + rand(60); end
+      args.state.boss.y += (args.state.boss.target_y - args.state.boss.y) * 0.05
       args.state.boss.y += Math.sin(args.state.tick_count / 5) * 5 # Sine wave for added movement
       
       # Boss Entry
@@ -271,18 +243,20 @@ def tick(args)
       # Boss Attack (Fireballs)
       args.state.boss.fire_timer -= 1
       if args.state.boss.fire_timer <= 0
-         angle_to_player = args.geometry.angle_to(args.state.boss, args.state.player)
-         rads = angle_to_player.to_radians
-         dx = Math.cos(rads) * 15
-         dy = Math.sin(rads) * 15
-         args.state.asteroids << { x: args.state.boss.x, y: args.state.boss.y + 200, w: 80, h: 40, path: 'images/fire.png',  dx: dx, dy: dy, is_fire: true, angle: angle_to_player }
-         args.state.boss.fire_timer = 40 + rand(40) # Reset fire timer
-         args.state.shake = 10
+         angle = args.geometry.angle_to(args.state.boss, args.state.player).to_radians
+         args.state.asteroids << { x: args.state.boss.x, y: args.state.boss.y + 200, w: 80, h: 40, path: 'images/fire.png',  dx: Math.cos(angle)*15, dy: Math.sin(angle)*15, is_fire: true, angle: angle.to_degrees }
+         args.state.boss.fire_timer = 40 + rand(40); args.state.shake = 10
       end
       
       # Boss Hit Feedback
       args.state.boss.g = [args.state.boss.g + 10, 255].min
       args.state.boss.b = [args.state.boss.b + 10, 255].min
+
+      # Boss Death Logic Fix
+      if args.state.boss.hp <= 0
+        args.state.flash = 255; args.state.shake = 50
+        force_scene_switch(args, :outro)
+      end
     end
 
     # Physics
@@ -346,9 +320,16 @@ def tick(args)
     
     # UI
     if args.state.boss
-        args.outputs.solids << [440, 680, args.state.boss.hp * 2, 15, 255, 50, 50] # Boss HP Bar
-        args.outputs.borders << [440, 680, 400, 15, 255, 255, 255]
-        args.outputs.labels << { x: 640, y: 650, text: "SOVEREIGN DRAGON", alignment_enum: 1, r: 255, g: 100, b: 100 }
+        # Background for Health Bar (Black for contrast)
+        args.outputs.solids << { x: 440, y: 680, w: 400, h: 15, r: 0, g: 0, b: 0 }
+        # Progress Bar (Red)
+        bar_width = ((args.state.boss.hp || 200) / 200.0) * 400
+        args.outputs.solids << { x: 440, y: 680, w: bar_width, h: 15, r: 255, g: 50, b: 50 }
+        # Border (White)
+        args.outputs.borders << { x: 440, y: 680, w: 400, h: 15, r: 255, g: 255, b: 255 }
+        # Label
+        args.outputs.labels << { x: 640, y: 650, text: "SOVEREIGN DRAGON", alignment_enum: 1, r: 255, g: 100, b: 100, font: "fonts/manaspc.ttf" }
+        
         if args.state.boss.hp <= 0; force_scene_switch(args, :outro); end
     else
         args.outputs.labels << { x: 640, y: 680, text: "ASTEROIDS: #{args.state.asteroids_destroyed}/10", alignment_enum: 1, r: 100, g: 255, b: 255 }
@@ -357,16 +338,32 @@ def tick(args)
   # --- SCENE: OUTRO (Credits/Replay) ---
   elsif args.state.scene == :outro
     args.outputs.background_color = [0, 0, 0]
-    args.outputs.sprites << { x: 640-100, y: 360-100, w: 200, h: 200, path: 'images/logo.png', a: 150 }
+    # Logo: Larger and positioned in the upper half
+    args.outputs.sprites << { x: 640-150, y: 380, w: 300, h: 300, path: 'images/logo.png', a: 255 }
     
-    # Outro Text
-    args.outputs.labels << { x: 640, y: 450, text: "LEGEND RESTORED.", size_px: 50, alignment_enum: 1, r: 255, g: 255, b: 255 }
-    args.outputs.labels << { x: 640, y: 390, text: "LEYENDA RESTAURADA.", size_px: 30, alignment_enum: 1, r: 255, g: 100, b: 0 } 
+    # Text: Positioned in the lower half with better contrast
+    args.outputs.labels << { 
+      x: 640, y: 320, text: "LEGEND RESTORED.", 
+      size_px: 55, alignment_enum: 1, 
+      r: 255, g: 255, b: 255, font: "fonts/manaspc.ttf" 
+    }
+    args.outputs.labels << { 
+      x: 640, y: 260, text: "LEYENDA RESTAURADA.", 
+      size_px: 35, alignment_enum: 1, 
+      r: 255, g: 215, b: 0 # Gold
+    } 
     
-    args.outputs.labels << { x: 640, y: 330, text: "IMAGINATION IS THE LIMIT.", size_px: 20, alignment_enum: 1, r: 100, g: 100, b: 100 }
-    args.outputs.labels << { x: 640, y: 300, text: "La imaginación es el límite.", size_px: 15, alignment_enum: 1, r: 100, g: 100, b: 100 }
+    args.outputs.labels << { 
+      x: 640, y: 200, text: "IMAGINATION IS THE LIMIT.", 
+      size_px: 22, alignment_enum: 1, 
+      r: 180, g: 180, b: 200 # Soft Blue/Grey
+    }
     
-    args.outputs.labels << { x: 640, y: 250, text: "Press 'R' to Create Again / Presiona 'R' para Crear de Nuevo", size_px: 15, alignment_enum: 1, r: 50, g: 50, b: 50 }
+    args.outputs.labels << { 
+      x: 640, y: 150, text: "Press 'R' to Create Again / Presiona 'R' para Crear de Nuevo", 
+      size_px: 18, alignment_enum: 1, 
+      r: 255, g: 255, b: 255, a: 150 
+    }
     
     if args.inputs.keyboard.key_down.r
       force_scene_switch(args, :intro)
@@ -381,24 +378,64 @@ def tick(args)
   args.outputs.solids << { x: 0, y: 0, w: 1280, h: 80, r: 0, g: 0, b: 0 }   # Bottom Bar
   args.outputs.solids << { x: 0, y: 640, w: 1280, h: 80, r: 0, g: 0, b: 0 } # Top Bar
   
+  # --- RIVE-STYLE TRANSITION CURTAIN ---
+  if args.state.transition_active
+    args.state.transition_progress += 0.03 # Duration ~30 frames
+    prog = args.state.transition_progress
+    
+    # Easing: Faster in the middle
+    # Curtain logic: Two bars moving from sides to center
+    curtain_w = 640 * (prog <= 0.5 ? prog * 2 : (1.0 - prog) * 2)
+    # Clamp to ensure full coverage at midpoint
+    curtain_w = 640 if (prog > 0.45 && prog < 0.55)
+    
+    args.outputs.solids << { x: 0, y: 0, w: curtain_w, h: 720, r: 0, g: 0, b: 0 } # Left Curtain
+    args.outputs.solids << { x: 1280 - curtain_w, y: 0, w: curtain_w, h: 720, r: 0, g: 0, b: 0 } # Right Curtain
+
+    # Middle Glitch Line (Vector feel)
+    if prog > 0.4 && prog < 0.6
+      args.outputs.solids << { x: 638, y: 0, w: 4, h: 720, r: 255, g: 255, b: 255, a: 200 }
+    end
+
+    # Swap Scene at midpoint (Curtains closed)
+    if prog >= 0.5 && !args.state.transition_swapped
+      perform_scene_swap(args, args.state.pending_scene)
+      args.state.transition_swapped = true
+    end
+
+    # End Transition
+    if prog >= 1.0
+      args.state.transition_active = false
+      args.state.pending_scene = nil
+    end
+  end
+
   # Flash overlay
   args.outputs.solids << { x: 0, y: 0, w: 1280, h: 720, r: 255, g: 255, b: 255, a: args.state.flash } if args.state.flash > 0
 end
 
 def force_scene_switch(args, next_scene)
-  args.state.scene = next_scene
-  args.state.scene_started_at = args.state.tick_count
-  # Clean specific states if needed
-  args.state.car_x = nil
-  args.state.obstacles = nil
-  args.state.boss = nil
-  args.state.asteroids_destroyed = 0 # Fix: Reset counter so Phase 1 happens on replay
-  args.state.asteroids = []
-  args.state.bullets = []
-  args.state.explosions = []
+  # Guard: Don't trigger if we are already transitioning to that exact scene
+  return if args.state.transition_active && args.state.pending_scene == next_scene
   
-  # Audio control: Stop music if going back to Intro or Outro
+  # Trigger the "Rive Meetup" Transition
+  args.state.transition_active = true
+  args.state.transition_progress = 0
+  args.state.transition_swapped = false
+  args.state.pending_scene = next_scene
+end
+
+# Internal Logic: What actually changes the state
+def perform_scene_swap(args, next_scene)
+  # Stop music if going back/ending
   if next_scene == :intro || next_scene == :outro
     args.audio[:bgm] = nil
   end
+
+  args.state.scene = next_scene
+  args.state.scene_started_at = args.state.tick_count
+  # Clean specific states
+  args.state.car_x = nil; args.state.obstacles = nil; args.state.boss = nil
+  args.state.asteroids_destroyed = 0; args.state.asteroids = []; args.state.bullets = []; args.state.explosions = []
+  args.state.flash = 255
 end
