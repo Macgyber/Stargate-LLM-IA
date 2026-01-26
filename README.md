@@ -30,7 +30,7 @@ Imagine that building software is like assembling a **10,000-piece giant LEGO se
 > **THE 2 MAGIC ELEMENTS:** To activate Stargate, you only need to copy and paste these 2 elements into your game's main folder:
 > 1.  📂 **`stargate_AI/`**: The folder containing the brain, the map, and the guides.
 > 2.  📜 **`.cursorrules`**: The "sacred" instructions for the AI.
-> 3.  📂 **`samples/` (Optional)**: Code examples. You can place this folder anywhere in your project; the AI will search for it to avoid inventing and follow your style.
+> 3.  📂 **`samples/` (Optional)**: Code examples (usually included in your DragonRuby copy). You can place this folder anywhere in your project; the AI will search for it to avoid inventing and follow your style.
 
 **It should look like this inside your game folder (where `app/` is located):**
 
