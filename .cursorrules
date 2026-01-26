@@ -3,15 +3,15 @@
 # YOU ARE BOUND BY A SACRED CONTRACT. READ THIS BEFORE ACTING.
 #
 # 1. THE TWIN PRINCIPLE
-#    The file `app/main.rb` and the file `.causal/index.yaml` are CONJOINED TWINS.
+#    The file `app/main.rb` and the file `stargate_AI/index.yaml` are CONJOINED TWINS.
 #    They share a single life force.
-#    - You CANNOT edit `app/main.rb` without updating `.causal/index.yaml`.
-#    - You CANNOT update `.causal/index.yaml` without editing `app/main.rb`.
+#    - You CANNOT edit `app/main.rb` without updating `stargate_AI/index.yaml`.
+#    - You CANNOT update `stargate_AI/index.yaml` without editing `app/main.rb`.
 #    - Discrepancy between Code (Reality) and Graph (Intent) is FATAL ERROR.
 #
 # 2. THE ENFORCEMENT
 #    Every time you modify the code:
-#    a) LOCATE the specific Node in `.causal/index.yaml` responsible for that logic.
+#    a) LOCATE the specific Node in `stargate_AI/index.yaml` responsible for that logic.
 #    b) UPDATE the `lines` or `ranges` in the YAML to match the new reality.
 #    c) UPDATE the `description` if the logic changed.
 #
