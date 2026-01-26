@@ -1,85 +1,83 @@
 # <img src="images/logo.png" width="120" height="120" align="right" /> 🌌 Stargate-LLM-IA
-### *Programación Causal: De archivos de texto a mapas de intención.*
+### *Causal Programming: From text files to intent maps.*
 
 ---
 
-> **"Recuperando la magia de los sistemas vivos del pasado para que la voluntad humana siempre sea la dueña de la tecnología."**
+> **"Reclaiming the magic of living systems from the past so that human will always remains the master of technology."**
 
 ---
-## ⚡ El Pitch
-**Stargate** no es una herramienta para escribir código, es una herramienta para **no perderse nunca**. 
+## ⚡ The Pitch
+**Stargate** is not a tool for writing code; it is a tool for **never getting lost**. 
 
-Cuando usas IA para programar, el proyecto suele volverse un caos de archivos que nadie entiende. Stargate obliga a la IA y al humano a seguir un **Mapa Causal**: un diagrama lógico donde cada línea de código tiene una *razón de ser* física y explícita. Si no hay razón, no hay código. 
+When using AI for programming, projects often spiral into a chaos of files that no one understands. Stargate forces both the AI and the human to follow a **Causal Map**: a logical diagram where every line of code has an explicit *reason for being*. If there is no reason, there is no code. 
 
-**Resultado:** Puedes escalar proyectos infinitamente con IA sin que el código se rompa o se vuelva "basura".
+**Result:** You can scale projects infinitely with AI without the code breaking or turning into "garbage."
 
 ---
 
-## 🧩 Concepto Central
-Imagina que construir software es como armar un **LEGO gigante de 10,000 piezas** con un asistente, o como instalar un **Mod de Minecraft**:
-*   **Sin Stargate:** El asistente pone piezas sin orden. Al final, tienes una estructura que se ve bien, pero si mueves algo, todo se cae y nadie sabe por qué.
-*   **Con Stargate:** Usas un **manual de instrucciones vivo** (dentro de la carpeta `stargate/`). Cada pieza está vinculada a una página del manual. Si quieres cambiar algo, el sistema sabe exactamente qué tocar y qué debe permanecer intacto. Igual que cuando cambias una carpeta de un Mod para añadir una función nueva sin romper el juego.
+## 🧩 Core Concept
+Imagine that building software is like assembling a **10,000-piece giant LEGO set** with an assistant, or installing a **Minecraft Mod**:
+*   **Without Stargate:** The assistant places pieces without order. Eventually, you have a structure that looks okay, but if you move anything, everything collapses and no one knows why.
+*   **With Stargate:** You use a **living instruction manual** (inside the `stargate_AI/` folder). Every piece is linked to a page in the manual. If you want to change something, the system knows exactly what to touch and what must remain intact. Just like when you swap a Mod folder to add a new feature without breaking the game.
 
 > [!TIP]
-> **En resumen:** Stargate es el motor de orden que permite escalar a máxima velocidad sin perder el control.
+> **In short:** Stargate is the order engine that allows you to scale at maximum speed without losing control.
 
 ---
 
----
-
-## 🚀 Instalación "Plug & Play" (Estilo Mod)
+## 🚀 "Plug & Play" Installation (Mod Style)
 > [!IMPORTANT]
-> **LOS 2 ELEMENTOS MÁGICOS:** Para activar Stargate, solo tienes que copiar y pegar estos 2 elementos en la carpeta principal de tu juego:
-> 1.  📂 **`stargate_AI/`**: La carpeta con el cerebro, el mapa y las guías.
-> 2.  📜 **`.cursorrules`**: Las instrucciones "sagradas" para la IA.
+> **THE 2 MAGIC ELEMENTS:** To activate Stargate, you only need to copy and paste these 2 elements into your game's main folder:
+> 1.  📂 **`stargate_AI/`**: The folder containing the brain, the map, and the guides.
+> 2.  📜 **`.cursorrules`**: The "sacred" instructions for the AI.
+> 3.  📂 **`samples/` (Optional)**: Code examples. You can place this folder anywhere in your project; the AI will search for it to avoid inventing and follow your style.
 
-**Debe verse así dentro de tu carpeta de juego (donde está `app/`):**
+**It should look like this inside your game folder (where `app/` is located):**
 
 ```text
-dragonruby/ (o donde lo tengas instalado)
-└── mygame/         <-- (TU CARPETA DE JUEGO)
-    ├── app/        <-- (donde está tu main.rb)
-    ├── stargate_AI/ <-- (carpeta que copias)
-    └── .cursorrules <-- (archivo que copias)
+dragonruby/ (or wherever you have it installed)
+└── mygame/          <-- YOUR GAME FOLDER
+    ├── app/         <-- (where your main.rb is)
+    ├── stargate_AI/ <-- (folder you copied)
+    └── .cursorrules <-- (file you copied)
 ```
 
-### 📋 Paso Único: Activa el código
-Copia estas dos líneas al principio de tu función `tick` en `app/main.rb`:
+### 📋 One-Step: Activate the Code
+Copy these two lines at the beginning of your `tick` function in `app/main.rb`:
 
 ```ruby
 def tick(args)
-  require "stargate_AI/core.rb" # 👈 Paso 1
-  Stargate.activate!(args)      # 👈 Paso 2
+  require "stargate_AI/core.rb" # 👈 Step 1
+  Stargate.activate!(args)      # 👈 Step 2
   
-  # Tu juego empieza aquí...
+  # Your game starts here...
 end
 ```
 
 ---
 
-## 🤖 Cómo hablar con la IA
-Copia y pega este mensaje en el chat para que tu asistente sepa qué hacer:
+## 🤖 How to Talk to the AI
+Copy and paste this message into the chat so your assistant knows what to do:
 
 ```text
-Hola. Estamos usando el protocolo Stargate-LLM-IA. Lee el archivo .cursorrules y mira el mapa en stargate_AI/index.yaml. A partir de ahora, cada cambio que hagas debe quedar escrito en el mapa. ¿Entendido?
+Hello. We are using the Stargate-LLM-IA protocol. Read the .cursorrules file and check the map at stargate_AI/index.yaml. From now on, every change you make must be recorded in the map. Understood?
 ```
 
 ---
 
-## 🛠️ Acceso Rápido
+## 🛠️ Quick Access
 
-*   🚀 **[¿CÓMO FUNCIONA? (DETALLES TÉCNICOS)](stargate_AI/docs/TECHNICAL_DETAILS.md)**: Todo sobre la instalación y el motor interno.
-*   🧠 **[FILOSOFÍA Y ARQUITECTURA](stargate_AI/docs/architecture/CAUSAL_EDITING_MODEL.md)**: El porqué detrás del sistema.
-*   🔄 **[RESET DEL SISTEMA](stargate_AI/bin/stargate-reset)**: Herramienta para sincronizar el mapa y el código.
+*   🚀 **[HOW DOES IT WORK? (TECHNICAL DETAILS)](stargate_AI/docs/TECHNICAL_DETAILS.md)**: Everything about installation and the internal engine.
+*   🧠 **[PHILOSOPHY & ARCHITECTURE](stargate_AI/docs/architecture/CAUSAL_EDITING_MODEL.md)**: The "why" behind the system.
+*   🔄 **[SYSTEM RESET](stargate_AI/bin/stargate-reset)**: Tool to synchronize the map and the code.
 
 ---
 
-## 🏛️ Inspiración
-Reviviendo la era dorada de las herramientas creativas:
+## 🏛️ Inspiration
+Reviving the golden age of creative tools:
 *   **[Smalltalk](https://en.wikipedia.org/wiki/Smalltalk)**
 *   **[HyperCard](https://en.wikipedia.org/wiki/HyperCard)**
 *   **[Spore](https://en.wikipedia.org/wiki/Spore_(2008_video_game))**
 *   **[Tomorrow Corporation Tech Demo](https://www.youtube.com/watch?v=72y2EC5fkcE)**
 
-**Desarrollando a la velocidad del pensamiento.** 🌌🐉🟦
-
+**Developing at the speed of thought. Again.** 🌌🐉🟦

@@ -57,7 +57,8 @@ run
 **The AI MUST NOT scan or refactor files freely.** All modifications must follow the Causal Protocol:
 
 1.  **Consult** `stargate_AI/index.yaml` to understand the Map.
-2.  **Identify** the single specific Causal Node responsible for the intent.
+2.  **Refer** to any `samples/` directory found in the project. These are the **Sovereign Examples**. The AI must mirror their style and structure to prevent hallucinations.
+3.  **Identify** the single specific Causal Node responsible for the intent.
 3.  **Operate** strictly within that node’s declared line ranges.
 4.  **Legitimacy**: Every edit must serve the Node's declared intention. Orphaned code is prohibited.
 

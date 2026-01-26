@@ -14,5 +14,5 @@ logs/
 
 # Project specific
 .stargate_lock
-
+.agent
 # Internal Tooling & Data

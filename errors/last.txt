@@ -1,5 +1,0 @@
-* EXCEPTION: uninitialized constant Regexp
-** Backtrace:
-*** app/stargate/immunology.rb:41:in classify
-*** app/stargate/immunology.rb:31:in handle_telemetry
-*** app/stargate/immunology.rb:116:in __log__
