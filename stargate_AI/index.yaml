@@ -1,93 +1,13 @@
 ---
-version: 1.2.3
-last_updated: '2026-01-25'
-context: Stargate Demo (Readability & Layout Patch)
+version: 1.0.0
+last_updated: '2026-01-26'
+context: "New Stargate Project (Seed State)"
+
 nodes:
   system.core:
-    description: Runtime entry point, Stargate activation, and Causal Sentinel
+    description: "Runtime entry point, Stargate activation, and main loop definition"
     files:
-    - path: app/main.rb
-      ranges:
-      - 1-16
-    primary_responsibility: Boot
-  
-  presentation.trailer_fx:
-    description: Global Cinematic Layer (Letterboxing, Shake, Flash overlays)
-    files:
-    - path: app/main.rb
-      ranges:
-      - 373-415
-    primary_responsibility: Movie Aesthetic
-
-  presentation.transition:
-    description: Rive-style procedural curtain transition with midpoint state swap
-    files:
-    - path: app/main.rb
-      ranges:
-      - 381-411
-    primary_responsibility: Fluid Scene Swapping
-
-  presentation.scene.intro:
-    description: Analog Static start - Triggers controlled audio (:bgm) on click
-    files:
-    - path: app/main.rb
-      ranges:
-      - 17-43
-    primary_responsibility: Atmosphere & Audio Start
-
-  presentation.scene.epic_quotes:
-    description: Scripted narrative with bilingual cinematic subtitles
-    files:
-    - path: app/main.rb
-      ranges:
-      - 44-86
-    primary_responsibility: Philosophy & Lore
-
-  presentation.scene.countdown:
-    description: Dramatic flash countdown
-    files:
-    - path: app/main.rb
-      ranges:
-      - 87-104
-    primary_responsibility: Narrative Pacing
-
-  presentation.scene.cars:
-    description: Formula 1 high-speed chase with track boundary fix
-    files:
-    - path: app/main.rb
-      ranges:
-      - 105-170
-    primary_responsibility: Gameplay 1 (Action)
-
-  presentation.scene.interlude:
-    description: Cinematic bridge transition
-    files:
-    - path: app/main.rb
-      ranges:
-      - 171-189
-    primary_responsibility: Tension Building
-
-  presentation.scene.boss_battle:
-    description: Climax Battle vs Dragon. Corrected HP/UI sizing.
-    files:
-    - path: app/main.rb
-      ranges:
-      - 190-337
-    primary_responsibility: Climax Gameplay
-
-  presentation.scene.outro:
-    description: Philosophical closure. Layout optimized for logo/text readability.
-    files:
-    - path: app/main.rb
-      ranges:
-      - 338-372
-    primary_responsibility: Closure & Creative Replay
-
-  system.scene_management:
-    description: Transition trigger and internal state swap logic
-    files:
-    - path: app/main.rb
-      ranges:
-      - 417-441
-    primary_responsibility: Sequencing & Resource Cleanup
-    
+      - path: "app/main.rb"
+        ranges: ["1-14"]
+    primary_responsibility: "Boot & Lifecycle"
+    dependencies: ["stargate_AI/core.rb"]
