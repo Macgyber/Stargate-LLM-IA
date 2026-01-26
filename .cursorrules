@@ -25,9 +25,10 @@
 #
 # 5. SOURCE OF TRUTH (ANTI-HALLUCINATION)
 #    You MUST search for any directory named `samples` in the project tree.
-#    If found, you MUST consult it before generating new logic. 
-#    Use it as a structural and stylistic reference.
-#    DO NOT invent patterns that contradict the existing samples.
+#    Consider these the **Sovereign Ingredients**. 
+#    Use them as the primary source of knowledge to build and expand the 
+#    project, ensuring even offline/local intelligence remains accurate.
+#    DO NOT invent patterns that contradict these samples.
 #
 # SIGNED: THE SOVEREIGN ARCHITECT
 # -----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-# <img src="images/logo.png" width="120" height="120" align="right" /> 🌌 Stargate-LLM-IA
+# <img src="stargate_AI/docs/images/logo.png" width="120" height="120" align="right" /> 🌌 Stargate-LLM-IA
 ### *Causal Programming: From text files to intent maps.*
 
 ---
@@ -30,7 +30,7 @@ Imagine that building software is like assembling a **10,000-piece giant LEGO se
 > **THE 2 MAGIC ELEMENTS:** To activate Stargate, you only need to copy and paste these 2 elements into your game's main folder:
 > 1.  📂 **`stargate_AI/`**: The folder containing the brain, the map, and the guides.
 > 2.  📜 **`.cursorrules`**: The "sacred" instructions for the AI.
-> 3.  📂 **`samples/` (Optional)**: Code examples (usually included in your DragonRuby copy). You can place this folder anywhere in your project; the AI will search for it to avoid inventing and follow your style.
+> 3.  📂 **`samples/` (Optional)**: **The Ingredients** (Code samples usually included in DragonRuby). These provide a local source of knowledge; even a local AI can use them to build your project without "hallucinating" or inventing external patterns.
 
 **It should look like this inside your game folder (where `app/` is located):**
 
@@ -69,6 +69,7 @@ Hello. We are using the Stargate-LLM-IA protocol. Read the .cursorrules file and
 
 *   🚀 **[HOW DOES IT WORK? (TECHNICAL DETAILS)](stargate_AI/docs/TECHNICAL_DETAILS.md)**: Everything about installation and the internal engine.
 *   🧠 **[PHILOSOPHY & ARCHITECTURE](stargate_AI/docs/architecture/CAUSAL_EDITING_MODEL.md)**: The "why" behind the system.
+*   📜 **[THE CAUSAL MANIFESTO](stargate_AI/docs/architecture/WHY_THIS_EXISTS.md)**: The vision and origin of Stargate.
 *   🔄 **[SYSTEM RESET](stargate_AI/bin/stargate-reset)**: Tool to synchronize the map and the code.
 
 ---

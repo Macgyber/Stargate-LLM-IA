@@ -34,7 +34,7 @@ The power of this model lies in its constraints. Intelligence is defined by what
 ## 4. Lifecycle Synchronization ♻️
 The Index and the Code are one. They are born together and die together.
 
--   **Automatic Synchronization**: When the project is reset (e.g., via `bin/stargate-reset`), both `app/main.rb` and `stargate_AI/index.yaml` are simultaneously restored to a **Seed State**.
+-   **Automatic Synchronization**: When the project is reset (e.g., via `stargate_AI/bin/stargate-reset`), both `app/main.rb` and `stargate_AI/index.yaml` are simultaneously restored to a **Seed State**.
 -   **No Orphaned Indices**: It is a violation of the model to have Index Nodes pointing to non-existent code. The Index must always reflect the exact reality of the Codebase.
 
 ---

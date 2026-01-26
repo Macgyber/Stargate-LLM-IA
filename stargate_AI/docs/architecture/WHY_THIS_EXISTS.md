@@ -38,7 +38,7 @@ In this project, a line of code is not justified by "functioning". It is justifi
 - **If the Node dies, the code dies.**
 - We do not keep "orphaned" code. We do not keep "just in case" logic.
 
-If we can't explain *why* a piece of code exists in the `.causal/index.yaml`, it has no right to be in the `app/`.
+If we can't explain *why* a piece of code exists in the `stargate_AI/index.yaml`, it has no right to be in the `app/`.
 
 ## 4. Why the Constraints Exist 🚫
 
@@ -53,7 +53,7 @@ This is not Git. We don't care about the history of how we got here as much as w
 - Stargate is a **Graph of Intents**.
 
 Think of the project as a **Living Book**:
-- **Index**: `.causal/index.yaml` (The Table of Contents)
+- **Index**: `stargate_AI/index.yaml` (The Table of Contents)
 - **Chapters**: Causal Nodes (Bounded responsibilities)
 - **Pages**: Line ranges in the code.
 

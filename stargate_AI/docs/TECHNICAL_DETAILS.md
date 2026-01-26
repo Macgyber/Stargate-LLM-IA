@@ -36,7 +36,7 @@ Governs how the code is modified.
 *   **Legitimacy:** If a Node's intention is removed from the graph, its code loses legitimacy and is pruned. No "ghost code".
 
 📜 **Authoritative specification:**  
-See [`docs/architecture/CAUSAL_EDITING_MODEL.md`](docs/architecture/CAUSAL_EDITING_MODEL.md)
+See [`architecture/CAUSAL_EDITING_MODEL.md`](architecture/CAUSAL_EDITING_MODEL.md)
 
 ---
 
