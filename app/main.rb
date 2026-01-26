@@ -1,7 +1,7 @@
 # --- STARGATE-LLM-IA START ---
 # CAUTION: EVERY CHANGE IN THIS FILE MUST BE REFLECTED IN .causal/index.yaml
 # Run /causal-sync workflow to ensure project integrity.
-require "app/stargate/core.rb"
+require "stargate_AI/core.rb"
 
 def tick(args)
   Stargate.activate!(args)

@@ -4,14 +4,14 @@ require 'fileutils'
 require 'date'
 
 # Configuration
-PROJECT_ROOT = File.expand_path('..', __dir__)
+PROJECT_ROOT = File.expand_path('../..', __dir__)
 APP_MAIN_PATH = File.join(PROJECT_ROOT, 'app', 'main.rb')
-INDEX_YAML_PATH = File.join(PROJECT_ROOT, '.causal', 'index.yaml')
+INDEX_YAML_PATH = File.join(PROJECT_ROOT, 'stargate_AI', 'index.yaml')
 
 # Seed Content for app/main.rb
 MAIN_RB_SEED = <<~RUBY
   # --- STARGATE-LLM-IA START ---
-  require "app/stargate/core.rb"
+  require "stargate_AI/core.rb"
 
   def tick(args)
     Stargate.activate!(args)
@@ -26,7 +26,7 @@ MAIN_RB_SEED = <<~RUBY
   end
 RUBY
 
-# Seed Content for .causal/index.yaml
+# Seed Content for stargate_AI/index.yaml
 INDEX_YAML_SEED = <<~YAML
   version: 1.0.0
   last_updated: #{Date.today.iso8601}
@@ -39,7 +39,7 @@ INDEX_YAML_SEED = <<~YAML
         - path: "app/main.rb"
           ranges: ["1-14"]
       primary_responsibility: "Boot & Lifecycle"
-      dependencies: ["app/stargate/core.rb"]
+      dependencies: ["stargate_AI/core.rb"]
 YAML
 
 def timestamp_backup_name(path)
@@ -67,7 +67,7 @@ puts "   ✨ Code Reset: app/main.rb restored to seed."
 
 # 3. Reset Index
 File.write(INDEX_YAML_PATH, INDEX_YAML_SEED)
-puts "   ✨ Index Reset: .causal/index.yaml synchronized to seed."
+puts "   ✨ Index Reset: stargate_AI/index.yaml synchronized to seed."
 
 puts "\n✅ RESET COMPLETE."
 puts "   The Book and the Table of Contents are now blank and synchronized."

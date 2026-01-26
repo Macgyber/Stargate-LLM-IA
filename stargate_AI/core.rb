@@ -15,16 +15,16 @@ module Stargate
       @mode          = mode
 
       # Internals are loaded in order of dependency
-      require "app/stargate/random.rb"
-      require "app/stargate/state.rb"
-      require "app/stargate/view.rb"
-      require "app/stargate/protocol.rb"
-      require "app/stargate/injection.rb"
-      require "app/stargate/clock.rb"
-      require "app/stargate/stability.rb"
-      require "app/stargate/time_travel.rb"
-      require "app/stargate/immunology.rb"
-      require "app/stargate/kernel.rb"
+      require "stargate_AI/random.rb"
+      require "stargate_AI/state.rb"
+      require "stargate_AI/view.rb"
+      require "stargate_AI/protocol.rb"
+      require "stargate_AI/injection.rb"
+      require "stargate_AI/clock.rb"
+      require "stargate_AI/stability.rb"
+      require "stargate_AI/time_travel.rb"
+      require "stargate_AI/immunology.rb"
+      require "stargate_AI/kernel.rb"
 
       # Initialize subsystems
       bootstrap(args)
