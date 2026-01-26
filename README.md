@@ -57,10 +57,19 @@ end
 ---
 
 ## 🤖 How to Talk to the AI
-Copy and paste this message into the chat so your assistant knows what to do:
+### *It's time to ignite the engines and let your imagination light the way.*
+
+To unleash the full power of Stargate, use this **"Passage 1: The Ignition"** prompt. It will force the AI to analyze your code and create its first Causal Map instantly:
 
 ```text
-Hello. We are using the Stargate-LLM-IA protocol. Read the .cursorrules file and check the map at stargate_AI/index.yaml. From now on, every change you make must be recorded in the map. Understood?
+"Initiating Stargate-LLM-IA Protocol. 
+
+1. Read `.cursorrules` to adopt your new logic and constraints.
+2. Analyze my current `app/main.rb` to understand its core intentions.
+3. Synchronize it with its twin: `stargate_AI/index.yaml`. Map my existing code into Causal Nodes right now.
+4. Search for 'The Ingredients' in any `samples/` folder to align with my style.
+
+From now on, you are the pilot of a Causal System. Do not write code without an intent in the map. Transform my text files into a Sovereign Graph. Are you ready?"
 ```
 
 ---
