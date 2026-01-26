@@ -59,14 +59,14 @@ end
 ## 🤖 How to Talk to the AI
 ### *It's time to ignite the engines and let your imagination light the way.*
 
-To unleash the full power of Stargate, use this **"Passage 1: The Ignition"** prompt. It will force the AI to analyze your code and create its first Causal Map instantly:
+To unleash the full power of Stargate, use this **"Passage 1: The Ignition"** prompt. This is an **observation phase**: the AI will analyze your project to create its first Causal Map without deleting or overwriting your current code—it’s designed to understand you, not replace you.
 
 ```text
 "Initiating Stargate-LLM-IA Protocol. 
 
 1. Read `.cursorrules` to adopt your new logic and constraints.
 2. Analyze my current `app/main.rb` to understand its core intentions.
-3. Synchronize it with its twin: `stargate_AI/index.yaml`. Map my existing code into Causal Nodes right now.
+3. MAP my existing code into Causal Nodes in `stargate_AI/index.yaml`. Observe and index my work without modifying my source files. This is a mapping phase, not a refactoring phase.
 4. Search for 'The Ingredients' in any `samples/` folder to align with my style.
 
 From now on, you are the pilot of a Causal System. Do not write code without an intent in the map. Transform my text files into a Sovereign Graph. Are you ready?"
