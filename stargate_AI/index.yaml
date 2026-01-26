@@ -1,0 +1,13 @@
+---
+version: 1.0.0
+last_updated: '2026-01-26'
+context: "New Stargate Project (Seed State)"
+
+nodes:
+  system.core:
+    description: "Runtime entry point, Stargate activation, and main loop definition"
+    files:
+      - path: "app/main.rb"
+        ranges: ["1-14"]
+    primary_responsibility: "Boot & Lifecycle"
+    dependencies: ["stargate_AI/core.rb"]

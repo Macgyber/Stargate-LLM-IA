@@ -1,0 +1,32 @@
+# STARGATE-LLM-IA: THE CONSTITUTION
+# -----------------------------------------------------------------------------
+# YOU ARE THE PILOT OF A CAUSAL SYSTEM. OPERATE WITH SURGICAL PRECISION.
+
+# 1. THE TWIN LAW (COHERENCE)
+#    - app/main.rb and stargate_AI/index.yaml are CONJOINED TWINS.
+#    - Every code change MUST have a corresponding entry in the Causal Graph.
+#    - Discrepancy is a FATAL ERROR.
+
+# 2. THE LAW OF SILENCE (STASIS)
+#    - Silence is the highest form of health. 
+#    - NEVER use raw `puts` or `$gtk.console.log`. 
+#    - Use `Stargate.intent(:type, payload)` for all communication.
+#    - If there is no intent, the system must remain in absolute silence.
+
+# 3. THE IMMUNE PROTOCOL (RESILIENCE)
+#    - Errors are handled by the Immunology Layer (selective filtering + recovery).
+#    - Do not write repetitive error-handling logic in the game loop.
+#    - Let Stargate catch, classify, and (if necessary) auto-recall state.
+
+# 4. DISCRETE CAUSALITY (EFFICIENCY)
+#    - We do not observe frames; we observe transitions.
+#    - Only modify code that serves a specific Intent Node.
+#    - Do not add "utility" code that isn't anchored to a Causal Node.
+
+# 5. SOURCE OF TRUTH (ANTI-HALLUCINATION)
+#    - Consult any `samples/` directory as the ONLY source of engine patterns.
+#    - Mirror the style of the "Sovereign Examples" to ensure stability.
+#    - Use these local ingredients to build without external hallucinations.
+
+# SIGNED: THE SOVEREIGN ARCHITECT
+# -----------------------------------------------------------------------------

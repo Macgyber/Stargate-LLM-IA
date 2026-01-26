@@ -1,0 +1,21 @@
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+
+# Project specific
+.stargate_lock
+.agent
+developer
+
+# DragonRuby SDK (Local Ingredients)
+SDK-DR/

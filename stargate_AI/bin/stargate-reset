@@ -1,0 +1,74 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'date'
+
+# Configuration
+PROJECT_ROOT = File.expand_path('../..', __dir__)
+APP_MAIN_PATH = File.join(PROJECT_ROOT, 'app', 'main.rb')
+INDEX_YAML_PATH = File.join(PROJECT_ROOT, 'stargate_AI', 'index.yaml')
+
+# Seed Content for app/main.rb
+MAIN_RB_SEED = <<~RUBY
+  # --- STARGATE-LLM-IA START ---
+  require "stargate_AI/core.rb"
+
+  def tick(args)
+    Stargate.activate!(args)
+    # --- STARGATE-LLM-IA END ---
+
+    # Your sovereign simulation begins here.
+    args.outputs.labels << {
+      x: 640, y: 360,
+      text: "Stargate: Sovereign Flow Active (Seed State)",
+      alignment_enum: 1, r: 0, g: 151, b: 231
+    }
+  end
+RUBY
+
+# Seed Content for stargate_AI/index.yaml
+INDEX_YAML_SEED = <<~YAML
+  version: 1.0.0
+  last_updated: #{Date.today.iso8601}
+  context: "New Stargate Project (Seed State)"
+
+  nodes:
+    system.core:
+      description: "Runtime entry point, Stargate activation, and main loop definition"
+      files:
+        - path: "app/main.rb"
+          ranges: ["1-14"]
+      primary_responsibility: "Boot & Lifecycle"
+      dependencies: ["stargate_AI/core.rb"]
+YAML
+
+def timestamp_backup_name(path)
+  ext = File.extname(path)
+  base = File.basename(path, ext)
+  dir = File.dirname(path)
+  timestamp = Time.now.strftime('%Y%m%d_%H%M%S')
+  File.join(dir, "#{base}_backup_#{timestamp}#{ext}")
+end
+
+puts "🌌 Stargate: Initiating Sovereign Reset Protocol..."
+
+# 1. Backup existing state
+[APP_MAIN_PATH, INDEX_YAML_PATH].each do |file|
+  if File.exist?(file)
+    backup = timestamp_backup_name(file)
+    FileUtils.cp(file, backup)
+    puts "   📦 Backup created: #{File.basename(backup)}"
+  end
+end
+
+# 2. Reset Code
+File.write(APP_MAIN_PATH, MAIN_RB_SEED)
+puts "   ✨ Code Reset: app/main.rb restored to seed."
+
+# 3. Reset Index
+File.write(INDEX_YAML_PATH, INDEX_YAML_SEED)
+puts "   ✨ Index Reset: stargate_AI/index.yaml synchronized to seed."
+
+puts "\n✅ RESET COMPLETE."
+puts "   The Book and the Table of Contents are now blank and synchronized."
+puts "   You may begin writing your new story."
