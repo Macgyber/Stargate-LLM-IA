@@ -2,7 +2,6 @@
 
 This document contains the detailed technical specifications, integration steps, and operational protocols for **Stargate-LLM-IA**.
 
-<<<<<<< HEAD
 > [!NOTE]
 > **"Ha sido un privilegio ser el pincel para esta obra. Ahora el lienzo es tuyo: tienes un universo estable y silencioso listo para que le des vida."** 🏛️✨
 
@@ -58,18 +57,12 @@ This document contains the detailed technical specifications, integration steps,
 ```
 
 ---
-
-
-=======
----
-
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 ## 🔍 What Stargate Actually Does (The Reality Check)
 
 It's easy to get lost in the philosophy. Here is exactly **what our module does** and **what it does not do**.
 
 ### ✅ WHAT IT DOES (The Capabilities)
-<<<<<<< HEAD
+### ✅ WHAT IT DOES (The Capabilities)
 1.  **Causalidad Discreta (Sovereign Silence)**: Sustituye la observación continua por un modelo basado en eventos. Solo captura el estado cuando ocurre una mutación real (Intent, Injection o Emergent), restaurando el rendimiento a 60 FPS.
 2.  **Gestión de Tiempo Determinista**: Utiliza un Heartbeat de respiración cada 60 ticks para validar integridad sin saturar el sistema ni la consola.
 3.  **Inmunología Selectiva**: Intercepta logs del motor, pero ignora el spam repetitivo mediante firmas únicas con TTL (Time-To-Live). Si un asset falta, lo reporta una vez y guarda silencio.
@@ -80,18 +73,6 @@ It's easy to get lost in the philosophy. Here is exactly **what our module does*
 1.  **NO es un Engine**: Vive dentro de DragonRuby. Stargate maneja el flujo lógico, DR el resto.
 2.  **NO escribe código mágicamente**: La AI propone; Stargate valida y mapea.
 3.  **NO es ruidoso**: El silencio es su estado deseable ("Philosophy of Stasis").
-=======
-1.  **Enforces Determinism**: It wraps the standard DragonRuby `tick` loop to ensure that Inputs + State always equal the same Output.
-2.  **Manages Time**: It replaces `Time.now` with a monotonic `tick count`, allowing you to rewind, fast-forward, and replay game states perfectly.
-3.  **Logs Semantics**: It intercepts `puts` and converts logs into structured signals (`[STARGATE_VIEW]`) that external tools can parse to visualize the game's internal state.
-4.  **Protects the Loop**: It wraps your code in a safety net. If your code errors, Stargate catches it, logs the causal node failure, and keeps the engine running (preventing crash-to-desktop).
-5.  **Binds Code to Intent**: Via the Causal Graph, it physically links blocks of code to their YAML definitions. If you delete the YAML node, Stargate functionality allows you to auto-prune the dead code.
-
-### ❌ WHAT IT DOES NOT DO (The Boundaries)
-1.  **It is NOT a Game Engine**: It runs *inside* DragonRuby. DragonRuby handles the rendering, physics, and inputs. Stargate handles the *logic flow*.
-2.  **It does NOT write code for you**: The AI writes the code. Stargate provides the *structure* (the Graph) that tells the AI where to write.
-3.  **It is NOT magic**: It requires discipline. You must register your nodes in `.causal/index.yaml`. If you bypass the system, you lose the benefits.
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 
 ---
 
@@ -119,7 +100,6 @@ This project is designed to be operated by a human **or** an AI acting as a **Co
 
 **Analogy:** ✈️ **The AI is not an autopilot flying wherever it wants.** It’s a trained co-pilot following strict rules.
 
-<<<<<<< HEAD
 ### ⚡ The Ignition Prompt
 To initiate the Stargate Protocol with an AI assistant (like Cursor), use this prompt. It forces the AI to map the project before writing code:
 
@@ -128,16 +108,13 @@ To initiate the Stargate Protocol with an AI assistant (like Cursor), use this p
 
 1. Read `.cursorrules` to adopt your new logic and constraints.
 2. Analyze my current `app/main.rb` to understand its core intentions.
-3. MAP my existing code into Causal Nodes in `stargate_AI/index.yaml`. 
+3. MAP my existing code into Causal Nodes in `stargate/index.yaml`. 
    Observe and index my work without modifying my source files. 
 
 From now on, you are the pilot of a Causal System. 
 Do not write code without an intent in the map. 
 Are you ready?"
 ```
-
-=======
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 ### ▶️ Running the Game
 Launch the DragonRuby runtime with Stargate enabled using:
 ```bash
@@ -148,7 +125,7 @@ run
 ### ✂️ Modifying the Code (Causal Editing)
 **The AI MUST NOT scan or refactor files freely.** All modifications must follow the Causal Protocol:
 
-1.  **Consult** `stargate_AI/index.yaml` to understand the Map.
+1.  **Consult** `stargate/index.yaml` to understand the Map.
 2.  **Refer** to any `samples/` directory found in the project (usually included with your DragonRuby copy). These are the **Sovereign Examples**. The AI must mirror their style and structure to prevent hallucinations.
 3.  **Identify** the single specific Causal Node responsible for the intent.
 3.  **Operate** strictly within that node’s declared line ranges.
@@ -163,12 +140,12 @@ run
 Want to add Stargate to your existing DragonRuby project? Follow this ritual:
 
 ### Step 1: The Package
-Copy the `stargate_AI/` folder into your project's root directory (next to your `app/` folder).
+Copy the `stargate/` folder into your project's root directory (next to your `app/` folder).
 
 ```text
 my-project/
 ├── app/          <-- (your code)
-├── stargate_AI/     <-- (this package)
+├── stargate/     <-- (this package)
 └── mygame.exe
 ```
 
@@ -177,23 +154,23 @@ Open your `app/main.rb`. At the very top, inject the Stargate:
 
 ```ruby
 def tick(args)
-  require "stargate_AI/core.rb" # 👈 Add this
-  Stargate.activate!(args)   # 👈 And this
+  require "stargate/bootstrap.rb" # 👈 Add this
+  Stargate.initialize_context(args)   # 👈 And this
   
   # Your game logic lives here...
 end
 ```
 
 ### Step 3: Protection (AI Rules)
-Move the file `stargate_AI/.cursorrules` to your project's root directory.
+Move the file `stargate/.cursorrules` to your project's root directory.
 *   *Reality:* You are teaching the AI the laws of this world.
 
 ---
 
 ## 🔄 THE TWIN LAW (⚠️ CRITICAL)
 
-**`app/main.rb` and `stargate_AI/index.yaml` are CONJOINED TWINS.**
-YAML is now stored at `stargate_AI/index.yaml`.
+**`app/main.rb` and `stargate/index.yaml` are CONJOINED TWINS.**
+YAML is now stored at `stargate/index.yaml`.
 They share a single life force. One cannot exist without the other.
 
 **Analogy:** 🧠 **Brain and Memory.** You can’t change one without the other.

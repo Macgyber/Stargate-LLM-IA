@@ -3,15 +3,9 @@
 # Stargate Core: The Sovereign API
 # This is the single entry point for the Catalyst Runtime.
 # Law of Silence: Internal organs are hidden; only the interface speaks.
-<<<<<<< HEAD
 module Stargate
-
-=======
-
-module Stargate
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
   class << self
-    def activate!(args, mode: :standard)
+    def initialize_context(args, mode: :standard)
       return if @active || @bootstrapping
 
       @bootstrapping = true
@@ -20,16 +14,16 @@ module Stargate
       @mode          = mode
 
       # Internals are loaded in order of dependency
-      require "stargate_AI/random.rb"
-      require "stargate_AI/state.rb"
-      require "stargate_AI/view.rb"
-      require "stargate_AI/protocol.rb"
-      require "stargate_AI/injection.rb"
-      require "stargate_AI/clock.rb"
-      require "stargate_AI/stability.rb"
-      require "stargate_AI/time_travel.rb"
-      require "stargate_AI/immunology.rb"
-      require "stargate_AI/kernel.rb"
+      require "stargate/random.rb"
+      require "stargate/state.rb"
+      require "stargate/view.rb"
+      require "stargate/protocol.rb"
+      require "stargate/injection.rb"
+      require "stargate/clock.rb"
+      require "stargate/stability.rb"
+      require "stargate/time_travel.rb"
+      require "stargate/immunology.rb"
+      require "stargate/kernel.rb"
 
       # Initialize subsystems
       bootstrap(args)
@@ -47,12 +41,8 @@ module Stargate
     end
 
     # 🌌 PUBLIC API: Intent Emission (the only way gameplay speaks)
-<<<<<<< HEAD
     def intent(type, payload = {}, **options)
       source = options[:source] || :gameplay
-=======
-    def intent(type, payload = {}, source: :gameplay)
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       event = {
         type: type,
         payload: payload,
@@ -70,7 +60,6 @@ module Stargate
       # Law of Runtime: Only active systems dispatch
       return unless @active
 
-<<<<<<< HEAD
       # CAUSAL LINK: Every gameplay intent marks the state as dirty.
       if source == :gameplay
         State.mark_dirty(:state, 
@@ -79,8 +68,6 @@ module Stargate
                          trace: "Stargate.intent(:#{type})")
       end
 
-=======
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       dispatch(event)
     end
 
@@ -105,11 +92,7 @@ module Stargate
     end
 
     def test_chaos!
-<<<<<<< HEAD
       Stargate::Chaos.induce_failure if const_defined?(:Chaos)
-=======
-      Stargate::Chaos.induce_failure if defined?(Stargate::Chaos)
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
     end
 
     def active?

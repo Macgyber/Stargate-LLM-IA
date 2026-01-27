@@ -1,147 +1,173 @@
-# <img src="stargate_AI/docs/images/logo.png" width="120" height="120" align="right" /> 🌌 Stargate-LLM-IA
-### *Causal Programming: From text files to intent maps.*
+# Stargate-LLM-IA
+
+A causal indexing system for controlling how LLMs read and modify code.
 
 ---
 
-> **"Reclaiming the magic of living systems from the past so that human will always remains the master of technology."**
+## What is this?
 
----
-<<<<<<< HEAD
+Stargate is a **control layer for LLM-assisted development**.
 
-## ⚡ The Pitch
-**Stargate** is not a tool for writing code; it is a tool for never getting lost.
+It introduces an explicit, human-maintained **causal index** that records *why* code exists, and forces an LLM to reference that intent before proposing or applying changes.
 
-When using AI for programming, projects often spiral into a chaos of files that no one understands. Stargate forces both the AI and the human to follow a **Causal Map**: a logical diagram where every line of code has an explicit reason for being. If there is no reason, there is no code.
-=======
-## ⚡ The Pitch
-**Stargate** is not a tool for writing code; it is a tool for **never getting lost**. 
-
-When using AI for programming, projects often spiral into a chaos of files that no one understands. Stargate forces both the AI and the human to follow a **Causal Map**: a logical diagram where every line of code has an explicit *reason for being*. If there is no reason, there is no code. 
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
-
-**Result:** You can scale projects infinitely with AI without the code breaking or turning into "garbage."
+Stargate does not generate features, refactor code automatically, or replace human decisions.  
+Its purpose is to **reduce unintended changes and loss of intent** when working with LLMs on an existing codebase.
 
 ---
 
-## 🧩 Core Concept
-Imagine that building software is like assembling a **10,000-piece giant LEGO set** with an assistant, or installing a **Minecraft Mod**:
-<<<<<<< HEAD
+## What problem does it address?
 
-=======
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
-*   **Without Stargate:** The assistant places pieces without order. Eventually, you have a structure that looks okay, but if you move anything, everything collapses and no one knows why.
-*   **With Stargate:** You use a **living instruction manual** (inside the `stargate_AI/` folder). Every piece is linked to a page in the manual. If you want to change something, the system knows exactly what to touch and what must remain intact. Just like when you swap a Mod folder to add a new feature without breaking the game.
+When using LLMs (Cursor, Copilot, local models) on real projects:
 
-> [!TIP]
-> **In short:** Stargate is the order engine that allows you to scale at maximum speed without losing control.
+- Context is implicit and fragile
+- The model modifies code without understanding why it exists
+- Changes fix one thing and silently break another
+- Developers lose trust in letting the LLM touch the code
+
+Stargate addresses **intent loss**, not code quality.
 
 ---
 
-## 🚀 "Plug & Play" Installation (Mod Style)
-<<<<<<< HEAD
+## What Stargate is (and is not)
 
-> [!IMPORTANT]
-> **THE 2 MAGIC ELEMENTS:** To activate Stargate, you only need to copy and paste these 2 elements into your game's main folder:
+### Stargate is:
+- A folder structure + ruleset
+- A causal index (`index.yaml`) describing code intent
+- A discipline enforced through tooling
+- A way to constrain LLM behavior
 
-1.  📂 **`stargate_AI/`**: The folder containing the brain, the map, and the guides.
-2.  📜 **`.cursorrules`**: The "sacred" instructions for the AI.
-3.  📂 **`samples/` (Optional)**: The Ingredients (Code samples usually included in DragonRuby). These provide a local source of knowledge; even a local AI can use them to build your project without "hallucinating" or inventing external patterns.
+### Stargate is NOT:
+- A framework
+- An API
+- A runtime engine
+- A refactoring tool
+- A guarantee against bugs
+- A “scale infinitely” solution
 
-It should look like this inside your game folder (where `app/` is located):
-=======
-> [!IMPORTANT]
-> **THE 2 MAGIC ELEMENTS:** To activate Stargate, you only need to copy and paste these 2 elements into your game's main folder:
-> 1.  📂 **`stargate_AI/`**: The folder containing the brain, the map, and the guides.
-> 2.  📜 **`.cursorrules`**: The "sacred" instructions for the AI.
-> 3.  📂 **`samples/` (Optional)**: **The Ingredients** (Code samples usually included in DragonRuby). These provide a local source of knowledge; even a local AI can use them to build your project without "hallucinating" or inventing external patterns.
+---
 
-**It should look like this inside your game folder (where `app/` is located):**
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
+## Core idea
+
+Every meaningful piece of code should answer three questions:
+
+1. What does it do?
+2. Why does it exist?
+3. What depends on it?
+
+Stargate stores those answers in a **causal index** and requires the LLM to consult that index before acting.
+
+If the intent is unclear, the LLM must stop.
+
+---
+
+## How it works (high level)
+
+1. The LLM analyzes the existing codebase
+2. It maps files and responsibilities into `stargate/index.yaml`
+3. Each entry represents a **causal node** (an intent)
+4. Future changes must:
+   - Reference an existing node, or
+   - Explicitly introduce a new one
+
+Code is not modified unless its intent is accounted for.
+
+---
+
+## Installation (DragonRuby example)
+
+Copy the following into your project directory:
 
 ```text
-dragonruby/ (or wherever you have it installed)
-└── mygame/          <-- YOUR GAME FOLDER
-    ├── app/         <-- (where your main.rb is)
-    ├── stargate_AI/ <-- (folder you copied)
-    └── .cursorrules <-- (file you copied)
+mygame/
+├── app/
+├── stargate/
+├── .cursorrules
+└── samples/ (optional)
 ```
 
-### 📋 One-Step: Activate the Code
-Copy these two lines at the beginning of your `tick` function in `app/main.rb`:
+Activate Stargate in `app/main.rb`:
 
 ```ruby
 def tick(args)
-  require "stargate_AI/core.rb" # 👈 Step 1
-  Stargate.activate!(args)      # 👈 Step 2
-  
-  # Your game starts here...
+  require "stargate/bootstrap.rb"
+  Stargate.initialize_context(args)
+
+  # Game logic continues normally
 end
 ```
 
+**Important:**
+- This does not change game behavior
+- It initializes context for LLM interaction
+- It does not run AI code at runtime
+
 ---
 
-## 🤖 How to Talk to the AI
-<<<<<<< HEAD
-It's time to ignite the engines and let your imagination light the way.
+## Using Stargate with an LLM
 
-To unleash the full power of Stargate, use this **"Passage 1: The Ignition"** prompt. This is an observation phase: the AI will analyze your project to create its first Causal Map without deleting or overwriting your current code—it’s designed to understand you, not replace you.
-=======
-### *It's time to ignite the engines and let your imagination light the way.*
+The first interaction is mapping only.
 
-To unleash the full power of Stargate, use this **"Passage 1: The Ignition"** prompt. This is an **observation phase**: the AI will analyze your project to create its first Causal Map without deleting or overwriting your current code—it’s designed to understand you, not replace you.
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
-
+**Example prompt:**
 ```text
-"Initiating Stargate-LLM-IA Protocol. 
-
-1. Read `.cursorrules` to adopt your new logic and constraints.
-2. Analyze my current `app/main.rb` to understand its core intentions.
-3. MAP my existing code into Causal Nodes in `stargate_AI/index.yaml`. Observe and index my work without modifying my source files. This is a mapping phase, not a refactoring phase.
-4. Search for 'The Ingredients' in any `samples/` folder to align with my style.
-
-From now on, you are the pilot of a Causal System. Do not write code without an intent in the map. Transform my text files into a Sovereign Graph. Are you ready?"
+Read .cursorrules.
+Analyze app/main.rb.
+Create a causal map in stargate/index.yaml.
+Do not modify source files.
+This is an observation phase only.
 ```
-<<<<<<< HEAD
-### ▶️ Running the Game
-To launch your project with Stargate enabled, simply use:
 
-```bash
-run
-```
-or
-```bash
-dragonruby-run
-```
-*(This is the shorthand for starting your DragonRuby simulation).*
----
-
-## 🛠️ Quick Access
-*   🚀 **[HOW DOES IT WORK? (TECHNICAL DETAILS)](stargate_AI/docs/TECHNICAL_DETAILS.md)**: Everything about installation and the internal engine.
-*   🧠 **[PHILOSOPHY & ARCHITECTURE](stargate_AI/docs/architecture/CAUSAL_EDITING_MODEL.md)**: The "why" behind the system.
-*   📜 **[THE CAUSAL MANIFESTO](stargate_AI/docs/TECHNICAL_DETAILS.md#origins-&-inspiration)**: The vision and origin of Stargate.
-=======
+After this, any change must be justified through the causal index.
 
 ---
 
-## 🛠️ Quick Access
+## Why not comments or documentation?
 
-*   🚀 **[HOW DOES IT WORK? (TECHNICAL DETAILS)](stargate_AI/docs/TECHNICAL_DETAILS.md)**: Everything about installation and the internal engine.
-*   🧠 **[PHILOSOPHY & ARCHITECTURE](stargate_AI/docs/architecture/CAUSAL_EDITING_MODEL.md)**: The "why" behind the system.
-*   📜 **[THE CAUSAL MANIFESTO](stargate_AI/docs/architecture/WHY_THIS_EXISTS.md)**: The vision and origin of Stargate.
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
-*   🔄 **[SYSTEM RESET](stargate_AI/bin/stargate-reset)**: Tool to synchronize the map and the code.
+Comments describe *what* code does.
+
+Stargate records:
+- **Why** the code exists
+- **What assumptions** it relies on
+- **What other parts** depend on it
+
+This matters when:
+- Letting an LLM modify unfamiliar code
+- Returning to a project after time
+- Evaluating the impact of a change
 
 ---
 
-## 🏛️ Inspiration
-Reviving the golden age of creative tools:
-<<<<<<< HEAD
+## Limitations
 
-=======
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
-*   **[Smalltalk](https://en.wikipedia.org/wiki/Smalltalk)**
-*   **[HyperCard](https://en.wikipedia.org/wiki/HyperCard)**
-*   **[Spore](https://en.wikipedia.org/wiki/Spore_(2008_video_game))**
-*   **[Tomorrow Corporation Tech Demo](https://www.youtube.com/watch?v=72y2EC5fkcE)**
+- Requires manual discipline
+- The causal index can drift if ignored
+- Best suited for small to medium projects
+- Current tooling assumes Cursor-style workflows
 
-**Developing at the speed of thought. Again.** 🌌🐉🟦
+These are known trade-offs.
+
+---
+
+## Who is this for?
+
+- Developers experimenting with LLM-assisted coding
+- Projects where predictability matters more than speed
+- People who want to understand changes, not just apply them
+
+---
+
+## Documentation
+
+- Technical details: [`stargate/docs/TECHNICAL_DETAILS.md`](stargate/docs/TECHNICAL_DETAILS.md)
+- Causal editing model: [`stargate/docs/architecture/CAUSAL_EDITING_MODEL.md`](stargate/docs/architecture/CAUSAL_EDITING_MODEL.md)
+- Reset tool: `stargate/bin/stargate-reset`
+
+---
+
+## Status
+
+This project is **experimental**.
+
+- The ideas are stable.
+- The implementation is evolving.
+
+Critical feedback is welcome.

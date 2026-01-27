@@ -34,14 +34,13 @@ module Stargate
       # Schedule a snippet for the next ritual.
       # Sovereign Law: Every intention must be anchored to an address.
       def schedule(snippet)
-<<<<<<< HEAD
+      def schedule(snippet)
         State.mark_dirty(:logic, 
                          source: :injection, 
                          intention: "Code Injection scheduled",
                          trace: snippet[0..100])
 
-=======
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
+
         @pending_evals << { 
           address: Clock.current_address, 
           code: snippet,

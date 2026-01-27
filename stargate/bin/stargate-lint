@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# stargate-lint is a detector, not a judge.
+# It reports inconsistencies; humans resolve intent.
+
+require 'yaml'
+require 'set'
+require 'pathname'
+
+# --- Configuration ---
+INDEX_PATH = 'stargate/index.yaml'
+IGNORED_DIRS = ['.git', 'stargate', '.stargate', 'vendor', 'tmp', 'log', 'node_modules'].freeze
+EXTENSIONS = ['.rb'].freeze 
+
+# --- 1. Load Causal Index ---
+unless File.exist?(INDEX_PATH)
+  puts "🔴 FATAL: Causal Index not found at #{INDEX_PATH}"
+  exit 1
+end
+
+begin
+  index_data = YAML.load_file(INDEX_PATH)
+  nodes = index_data['nodes'] || []
+rescue StandardError => e
+  puts "🔴 FATAL: Failed to parse #{INDEX_PATH}: #{e.message}"
+  exit 1
+end
+
+# --- 2. Build Declared Territory ---
+declared_files = Set.new
+
+nodes.each do |node|
+  files = node.dig('implementation', 'files')
+  next unless files
+  
+  files.each do |f|
+    # Normalize path to absolute for comparison
+    begin
+      declared_files.add(File.expand_path(f))
+    rescue
+      puts "⚠️  WARNING: Invalid path in index: #{f} (Node: #{node['id']})"
+    end
+  end
+end
+
+# --- 3. Scan Host Directory ---
+actual_files = Set.new
+root = Dir.pwd
+
+# Naive glob + manual filter is safer/clearer than complex exclude globs
+Dir.glob("**/*{#{EXTENSIONS.join(',')}}") do |file|
+  next if File.directory?(file)
+  
+  # Check ignores
+  # splitting path to check if any parent dir is in IGNORED_DIRS
+  parts = file.split(File::SEPARATOR)
+  if parts.any? { |p| IGNORED_DIRS.include?(p) }
+    next
+  end
+
+  actual_files.add(File.expand_path(file))
+end
+
+# --- 4. Detect Ghost Code ---
+ghosts = actual_files - declared_files
+
+# --- 5. Report ---
+if ghosts.empty?
+  puts "🟢 Stargate Integrity: 100% (No Ghost Code detected)"
+  exit 0
+else
+  puts "👻 GHOST CODE DETECTED"
+  puts "The following files contain logic but are not mapped in #{INDEX_PATH}:"
+  puts ""
+  
+  ghosts.map { |g| Pathname.new(g).relative_path_from(root).to_s }.sort.each do |ghost|
+    puts "  - #{ghost}"
+  end
+  
+  puts ""
+  puts "Action Required: Create a Causal Node or delete the file."
+  exit 1
+end

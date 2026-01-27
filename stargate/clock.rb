@@ -21,12 +21,8 @@ module Stargate
 
       def with_frame(seed, inputs)
         if @paused
-<<<<<<< HEAD
           is_heartbeat = ($gtk.args.state.tick_count % 60 == 0)
           Protocol.emit_moment(current_address, { hash: "PAUSED" }, seed, "stasis") if is_heartbeat
-=======
-          Protocol.emit_moment(current_address, { hash: "PAUSED" }, seed, "stasis")
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
           return :paused
         end
 
@@ -50,7 +46,6 @@ module Stargate
 
           yield if block_given?
 
-<<<<<<< HEAD
           # Law of Authority: The frame represents the state AFTER execution.
           @current_frame += 1
           
@@ -80,25 +75,6 @@ module Stargate
           :ok
         rescue => e
           Stargate.intent(:alert, { message: "CLOCK ERROR: #{e.message}", trace: e.backtrace.first }, source: :system)
-=======
-          yield if block_given?
-
-          # Law of Authority: The frame represents the state AFTER execution.
-          @current_frame += 1
-          
-          # Watcher Mode Optimization: We no longer capture full state snapshots every frame.
-          # This restores 60 FPS performance.
-          # state_packet = State.capture
-          # if state_packet
-          #   @last_authoritative_hash = state_packet[:hash]
-          #   Protocol.emit_moment(current_address, state_packet, seed)
-          # end
-
-          :ok
-        rescue => e
-          Stargate.intent(:alert, { message: "CLOCK ERROR: #{e.message}" }, source: :system)
-          puts e.backtrace.join("\n") if $gtk && $stargate_debug
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
           Injection.rollback!
           :error
         end
@@ -137,11 +113,7 @@ module Stargate
         @current_branch = branch_id
         @current_frame = frame
         
-<<<<<<< HEAD
         Stargate.intent(:trace, { message: "⏪ Stargate: Restoring state for #{branch_id}@#{frame} (Hash: #{hash})" }, source: :system)
-=======
-        $gtk.console.log "⏪ Stargate: Restoring state for #{branch_id}@#{frame} (Hash: #{hash})"
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
         
         data = State.load_from_disk(hash)
         if data
@@ -151,11 +123,7 @@ module Stargate
           Random.begin_frame(seed)
           :ok
         else
-<<<<<<< HEAD
           Stargate.intent(:alert, { message: "❌ ERROR: State blob #{hash} not found on disk!" }, source: :system)
-=======
-          $gtk.console.log "❌ ERROR: State blob #{hash} not found on disk!"
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
           :error
         end
       end
@@ -163,24 +131,17 @@ module Stargate
       def pause!
         @paused = true
         Random.reset!
-<<<<<<< HEAD
         Stargate.intent(:trace, { message: "🛑 STARGATE: Simulation PAUSED (Stasis Mode)." }, source: :system)
-=======
-        $gtk.console.log "🛑 STARGATE: Simulation PAUSED (Stasis Mode)."
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       end
 
       def resume!
         @paused = false
-<<<<<<< HEAD
+        @paused = false
         Stargate.intent(:trace, { message: "▶️ STARGATE: Simulation RESUMED." }, source: :system)
       end
 
       def paused?
         @paused || false
-=======
-        $gtk.console.log "▶️ STARGATE: Simulation RESUMED."
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       end
 
       # Jump to specific coordinates (Internal use or raw jumps)
@@ -188,13 +149,10 @@ module Stargate
         @current_branch = branch_id
         @current_frame = frame
       end
-<<<<<<< HEAD
 
       def tag_frame(tag)
         Stargate.intent(:metadata, { frame: current_address, tag: tag }, source: :system)
       end
-=======
->>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
     end
   end
 end

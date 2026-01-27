@@ -1,0 +1,14 @@
+nodes:
+  - id: host-entry-point
+    intent: >
+      Serve as the sovereign entry point for the host runtime,
+      establishing the execution boundary, initializing the
+      Stargate context, and delegating control to the game loop.
+    responsibility:
+      - Define the tick execution boundary
+      - Initialize the Stargate context
+      - Delegate control to host/game logic
+    implementation:
+      files:
+        - app/main.rb
+    depends_on: []
