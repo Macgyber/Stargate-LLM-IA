@@ -1,21 +1,18 @@
-# Local environment variables
-.env
-.env.*
-!.env.example
+# DragonRuby Engine Binaries
+SDK-DR
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
+# Temporary & runtime files
+tmp/
 logs/
+.dragonruby/
+*.log
 
+# Windows Artifacts
+Thumbs.db
+Desktop.ini
 
-# Project specific
-.stargate_lock
-.agent
-developer
+# Mac Artifacts
+.DS_Store
 
-# DragonRuby SDK (Local Ingredients)
-SDK-DR/
+# User-specific
+.env
