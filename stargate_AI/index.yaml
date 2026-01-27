@@ -1,13 +1,48 @@
 ---
-version: 1.0.0
+version: 1.0.2
 last_updated: '2026-01-26'
-context: "New Stargate Project (Seed State)"
+context: "Stargate-LLM-IA Stable Environment"
 
 nodes:
   system.core:
-    description: "Runtime entry point, Stargate activation, and main loop definition"
+    description: "Runtime entry point and activation layer."
     files:
       - path: "app/main.rb"
-        ranges: ["1-14"]
+        ranges: ["1-5"]
     primary_responsibility: "Boot & Lifecycle"
     dependencies: ["stargate_AI/core.rb"]
+
+  gameplay.logo:
+    description: "Interactive DragonRuby Logo with arrow key movement."
+    files:
+      - path: "app/main.rb"
+        ranges: ["7-41"]
+    primary_responsibility: "Visuals and User Input"
+    intents:
+      - movement: "Tracks arrow key input and logo position."
+
+  system.kernel:
+    description: "Nervous system: Interposition over DragonRuby."
+    files:
+      - path: "stargate_AI/kernel.rb"
+    primary_responsibility: "Flow control and method interception."
+    dependencies: ["stargate_AI/clock.rb", "stargate_AI/stability.rb"]
+
+  system.clock:
+    description: "Temporal synchronization and deterministic frames."
+    files:
+      - path: "stargate_AI/clock.rb"
+    primary_responsibility: "Frame management and event sequencing."
+
+  system.stability:
+    description: "Single instance enforcement and asset watching."
+    files:
+      - path: "stargate_AI/stability.rb"
+    primary_responsibility: "Runtime safety and health checks."
+
+  view.engine:
+    description: "Visual observer and protocol emitter."
+    files:
+      - path: "stargate_AI/view.rb"
+    primary_responsibility: "Semantic event reporting to external tools."
+    dependencies: ["stargate_AI/protocol.rb"]

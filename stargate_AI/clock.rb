@@ -74,8 +74,7 @@ module Stargate
 
           :ok
         rescue => e
-          Stargate.intent(:alert, { message: "CLOCK ERROR: #{e.message}" }, source: :system)
-          puts e.backtrace.join("\n") if $gtk && $stargate_debug
+          Stargate.intent(:alert, { message: "CLOCK ERROR: #{e.message}", trace: e.backtrace.first }, source: :system)
           Injection.rollback!
           :error
         end

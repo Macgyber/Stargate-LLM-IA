@@ -3,8 +3,8 @@
 # Stargate Core: The Sovereign API
 # This is the single entry point for the Catalyst Runtime.
 # Law of Silence: Internal organs are hidden; only the interface speaks.
-
 module Stargate
+
   class << self
     def activate!(args, mode: :standard)
       return if @active || @bootstrapping
@@ -24,7 +24,6 @@ module Stargate
       require "stargate_AI/stability.rb"
       require "stargate_AI/time_travel.rb"
       require "stargate_AI/immunology.rb"
-      require "stargate_AI/recording.rb"
       require "stargate_AI/kernel.rb"
 
       # Initialize subsystems
@@ -43,7 +42,8 @@ module Stargate
     end
 
     # 🌌 PUBLIC API: Intent Emission (the only way gameplay speaks)
-    def intent(type, payload = {}, source: :gameplay)
+    def intent(type, payload = {}, **options)
+      source = options[:source] || :gameplay
       event = {
         type: type,
         payload: payload,
@@ -93,7 +93,7 @@ module Stargate
     end
 
     def test_chaos!
-      Stargate::Chaos.induce_failure if defined?(Stargate::Chaos)
+      Stargate::Chaos.induce_failure if const_defined?(:Chaos)
     end
 
     def active?

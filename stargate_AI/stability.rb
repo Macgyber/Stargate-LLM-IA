@@ -13,7 +13,7 @@ module Stargate
       end
 
       def tick(args)
-        enforce_single_instance(args) if args.state.tick_count % 120 == 0
+        enforce_single_instance(args) if args.state.tick_count % 30 == 0
         watch_assets(args) if args.state.tick_count % 60 == 0
       end
 

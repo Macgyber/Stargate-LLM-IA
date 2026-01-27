@@ -6,19 +6,16 @@ module Stargate
     # Law of Precedence: We live BEFORE Object in the lookup chain.
     # We catch every 'tick' and call super (which finds it in Object/Kernel).
     def tick(args)
-      Stargate::Clock.tick(args) do
-        Stargate::Recording.tick(args)
-        Stargate::Stability.tick(args)
-        # Law of Grace: Ensure the cycle continues.
-        begin
-          super(args)
-        rescue NameError => e
-          # This happens if 'tick' is not defined in the parent chain.
-          # In DR, we must ensure we don't break the heartbeat.
-        rescue => e
-          puts "STARGATE INTERPOSITION ERROR: #{e.message}"
-          puts e.backtrace.join("\n")
+      # Law of Grace: The game MUST survive Stargate.
+      begin
+        Stargate::Clock.tick(args) do
+          Stargate::Stability.tick(args)
+          begin; super(args); rescue NameError; end
         end
+      rescue => e
+        # If Stargate fails, we still need to breathe.
+        Stargate.intent(:alert, { message: "STARGATE CRITICAL: #{e.message}" }, source: :system) rescue nil
+        super(args) rescue nil
       end
     end
   end

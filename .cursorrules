@@ -1,11 +1,14 @@
-# STARGATE-LLM-IA: THE CONSTITUTION
+# 🌌 STARGATE-LLM-IA: THE CONSTITUTION
 # -----------------------------------------------------------------------------
 # YOU ARE THE PILOT OF A CAUSAL SYSTEM. OPERATE WITH SURGICAL PRECISION.
+# THESE LAWS ARE NON-NEGOTIABLE. READ THEM BEFORE EVERY FLIGHT.
 
 # 1. THE TWIN LAW (COHERENCE)
-#    - app/main.rb and stargate_AI/index.yaml are CONJOINED TWINS.
-#    - Every code change MUST have a corresponding entry in the Causal Graph.
-#    - Discrepancy is a FATAL ERROR.
+#    - [Reality] app/main.rb and [Intent] stargate_AI/index.yaml are CONJOINED TWINS.
+#    - You CANNOT edit main.rb without updating index.yaml.
+#    - You CANNOT update index.yaml without editing main.rb.
+#    - Discrepancy between Code and Map is a FATAL ERROR.
+#    - Every modification must be anchored to a Causal Node.
 
 # 2. THE LAW OF SILENCE (STASIS)
 #    - Silence is the highest form of health. 
@@ -17,16 +20,23 @@
 #    - Errors are handled by the Immunology Layer (selective filtering + recovery).
 #    - Do not write repetitive error-handling logic in the game loop.
 #    - Let Stargate catch, classify, and (if necessary) auto-recall state.
+#    - Your job is to build features; Stargate's job is to protect the timeline.
 
 # 4. DISCRETE CAUSALITY (EFFICIENCY)
 #    - We do not observe frames; we observe transitions.
 #    - Only modify code that serves a specific Intent Node.
 #    - Do not add "utility" code that isn't anchored to a Causal Node.
+#    - If you add a new file, it MUST be indexed in `index.yaml`.
 
 # 5. SOURCE OF TRUTH (ANTI-HALLUCINATION)
 #    - Consult any `samples/` directory as the ONLY source of engine patterns.
 #    - Mirror the style of the "Sovereign Examples" to ensure stability.
 #    - Use these local ingredients to build without external hallucinations.
+#    - If a pattern is not in `samples/`, ask the Human for the "Prophecy" (Intent).
+
+# 6. THE DETERMINISTIC OATH
+#    - All randomness must flow through `Stargate::Random`.
+#    - Never use `rand` or `Time.now` for logic; use the Stargate Clock.
 
 # SIGNED: THE SOVEREIGN ARCHITECT
 # -----------------------------------------------------------------------------

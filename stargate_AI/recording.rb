@@ -23,7 +23,7 @@ module Stargate
         if is_recording && !@last_recording_state
           Stargate.intent(:recording_start, { message: "🔴 DragonRuby: Session Recording Started." }, source: :system)
           # Inform the causality layer that we are in a 'Golden' timeline segment
-          Clock.tag_frame("recorded") if defined?(Clock)
+          Stargate::Clock.tag_frame("recorded") if Stargate.const_defined?(:Clock)
         elsif !is_recording && @last_recording_state
           Stargate.intent(:recording_stop, { message: "⚪ DragonRuby: Session Recording Stopped." }, source: :system)
         end
