@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # DragonRuby Engine Binaries
 SDK-DR
 
@@ -16,3 +17,24 @@ Desktop.ini
 
 # User-specific
 .env
+=======
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+
+# Project specific
+.stargate_lock
+.agent
+developer
+# Internal Tooling & Data
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434

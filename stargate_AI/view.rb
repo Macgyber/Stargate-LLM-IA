@@ -29,7 +29,12 @@ module Stargate
         }
         
         # Standardized output for the Sovereign Observer
+<<<<<<< HEAD
         Protocol.write_view(payload)
+=======
+        serialized = payload.respond_to?(:to_json) ? payload.to_json : payload.inspect
+        puts "[STARGATE_VIEW] #{serialized}"
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       end
     end
 

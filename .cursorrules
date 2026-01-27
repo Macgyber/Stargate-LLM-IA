@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🌌 STARGATE-LLM-IA: THE CONSTITUTION
 # -----------------------------------------------------------------------------
 # YOU ARE THE PILOT OF A CAUSAL SYSTEM. OPERATE WITH SURGICAL PRECISION.
@@ -38,5 +39,39 @@
 #    - All randomness must flow through `Stargate::Random`.
 #    - Never use `rand` or `Time.now` for logic; use the Stargate Clock.
 
+=======
+# STARGATE-LLM-IA: THE TWIN LAW
+# -----------------------------------------------------------------------------
+# YOU ARE BOUND BY A SACRED CONTRACT. READ THIS BEFORE ACTING.
+#
+# 1. THE TWIN PRINCIPLE
+#    The file `app/main.rb` and the file `stargate_AI/index.yaml` are CONJOINED TWINS.
+#    They share a single life force.
+#    - You CANNOT edit `app/main.rb` without updating `stargate_AI/index.yaml`.
+#    - You CANNOT update `stargate_AI/index.yaml` without editing `app/main.rb`.
+#    - Discrepancy between Code (Reality) and Graph (Intent) is FATAL ERROR.
+#
+# 2. THE ENFORCEMENT
+#    Every time you modify the code:
+#    a) LOCATE the specific Node in `stargate_AI/index.yaml` responsible for that logic.
+#    b) UPDATE the `lines` or `ranges` in the YAML to match the new reality.
+#    c) UPDATE the `description` if the logic changed.
+#
+# 3. THE PENALTY
+#    If you generate code without updating the index, you have broken the chain of causality.
+#    The system will treat your code as "Hallucination" and it may be purged.
+#
+# 4. HOW TO THINK
+#    Do not think: "I will add a function."
+#    Think: "I will expand the [PresentationNode] in the Causal Graph."
+#
+# 5. SOURCE OF TRUTH (ANTI-HALLUCINATION)
+#    You MUST search for any directory named `samples` in the project tree.
+#    Consider these the **Sovereign Ingredients**. 
+#    Use them as the primary source of knowledge to build and expand the 
+#    project, ensuring even offline/local intelligence remains accurate.
+#    DO NOT invent patterns that contradict these samples.
+#
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 # SIGNED: THE SOVEREIGN ARCHITECT
 # -----------------------------------------------------------------------------

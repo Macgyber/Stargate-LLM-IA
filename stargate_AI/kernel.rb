@@ -6,6 +6,7 @@ module Stargate
     # Law of Precedence: We live BEFORE Object in the lookup chain.
     # We catch every 'tick' and call super (which finds it in Object/Kernel).
     def tick(args)
+<<<<<<< HEAD
       # Law of Grace: The game MUST survive Stargate.
       begin
         Stargate::Clock.tick(args) do
@@ -15,6 +16,11 @@ module Stargate
       rescue => e
         # If Stargate fails, we still need to breathe.
         Stargate.intent(:alert, { message: "STARGATE CRITICAL: #{e.message}" }, source: :system) rescue nil
+=======
+      Stargate::Clock.tick(args) do
+        Stargate::Stability.tick(args)
+        # Law of Grace: Only call super if a definition exists beyond our module.
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
         super(args) rescue nil
       end
     end
@@ -24,24 +30,43 @@ module Stargate
     class << self
       # Laws of the Machine
       def install!
+<<<<<<< HEAD
+=======
+        puts "STARGATE: [TRACE] Entering install! (installed=#{$stargate_installed})"
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
         return if $stargate_installed
         
         # 1. AUTHORITY: Prepend our interposition module to Object
         # This puts us at the head of the chain (Object.ancestors[0]).
         unless Object.ancestors.include?(Stargate::Interposition)
+<<<<<<< HEAD
+=======
+          puts "STARGATE: [TRACE] Prepending Interposition to Object..."
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
           Object.prepend(Stargate::Interposition)
         end
 
         # 2. PROOF: Verify absolute authority via ancestry
         if verify_interposition
+<<<<<<< HEAD
           # Final Sentinel (Symbol based, not string)
           Object.const_set(:STARGATE_INTERPOSED, :verified) rescue nil
           Stargate.intent(:trace, { message: "🛡️ Stargate Sovereignty Established." }, source: :system)
+=======
+          puts "STARGATE::INFECTED"
+          # Final Sentinel (Symbol based, not string)
+          Object.const_set(:STARGATE_INTERPOSED, :verified) rescue nil
+          puts "STARGATE: [TRACE] Sovereignty Established."
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
           
           # Initialize new systems
           Stargate::Immunology.install!
         else
+<<<<<<< HEAD
           Stargate.intent(:alert, { message: "⚠️ STARGATE: Interposition failed Ancestry Check." }, source: :system)
+=======
+          puts "STARGATE: [ERROR] Interposition failed Ancestry Check."
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
         end
 
         $stargate_installed = true
@@ -55,6 +80,10 @@ module Stargate
         ours = Object.ancestors.include?(Stargate::Interposition) && 
                Object.new.method(:tick).owner == Stargate::Interposition rescue false
         
+<<<<<<< HEAD
+=======
+        puts "STARGATE: [TRACE] Verifying Ancestry... ours=#{ours}"
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
         ours
       end
 

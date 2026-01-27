@@ -3,8 +3,13 @@
 # Stargate Core: The Sovereign API
 # This is the single entry point for the Catalyst Runtime.
 # Law of Silence: Internal organs are hidden; only the interface speaks.
+<<<<<<< HEAD
 module Stargate
 
+=======
+
+module Stargate
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
   class << self
     def activate!(args, mode: :standard)
       return if @active || @bootstrapping
@@ -42,8 +47,12 @@ module Stargate
     end
 
     # 🌌 PUBLIC API: Intent Emission (the only way gameplay speaks)
+<<<<<<< HEAD
     def intent(type, payload = {}, **options)
       source = options[:source] || :gameplay
+=======
+    def intent(type, payload = {}, source: :gameplay)
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       event = {
         type: type,
         payload: payload,
@@ -61,6 +70,7 @@ module Stargate
       # Law of Runtime: Only active systems dispatch
       return unless @active
 
+<<<<<<< HEAD
       # CAUSAL LINK: Every gameplay intent marks the state as dirty.
       if source == :gameplay
         State.mark_dirty(:state, 
@@ -69,6 +79,8 @@ module Stargate
                          trace: "Stargate.intent(:#{type})")
       end
 
+=======
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
       dispatch(event)
     end
 
@@ -93,7 +105,11 @@ module Stargate
     end
 
     def test_chaos!
+<<<<<<< HEAD
       Stargate::Chaos.induce_failure if const_defined?(:Chaos)
+=======
+      Stargate::Chaos.induce_failure if defined?(Stargate::Chaos)
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
     end
 
     def active?

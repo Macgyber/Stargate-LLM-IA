@@ -7,15 +7,24 @@ module Stargate
   module Random
     @prng = nil
     @calls_this_frame = 0
+<<<<<<< HEAD
     @current_seed = 0
 
     class << self
       attr_reader :calls_this_frame, :current_seed
+=======
+
+    class << self
+      attr_reader :calls_this_frame
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 
       # Sovereign entry point for each frame.
       # Controls Law XVII (Randomness).
       def begin_frame(seed)
+<<<<<<< HEAD
         @current_seed = seed
+=======
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
         @prng = ::Random.new(seed)
         @calls_this_frame = 0
       end

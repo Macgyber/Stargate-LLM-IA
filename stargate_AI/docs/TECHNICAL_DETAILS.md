@@ -2,6 +2,7 @@
 
 This document contains the detailed technical specifications, integration steps, and operational protocols for **Stargate-LLM-IA**.
 
+<<<<<<< HEAD
 > [!NOTE]
 > **"Ha sido un privilegio ser el pincel para esta obra. Ahora el lienzo es tuyo: tienes un universo estable y silencioso listo para que le des vida."** 🏛️✨
 
@@ -59,11 +60,16 @@ This document contains the detailed technical specifications, integration steps,
 ---
 
 
+=======
+---
+
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 ## 🔍 What Stargate Actually Does (The Reality Check)
 
 It's easy to get lost in the philosophy. Here is exactly **what our module does** and **what it does not do**.
 
 ### ✅ WHAT IT DOES (The Capabilities)
+<<<<<<< HEAD
 1.  **Causalidad Discreta (Sovereign Silence)**: Sustituye la observación continua por un modelo basado en eventos. Solo captura el estado cuando ocurre una mutación real (Intent, Injection o Emergent), restaurando el rendimiento a 60 FPS.
 2.  **Gestión de Tiempo Determinista**: Utiliza un Heartbeat de respiración cada 60 ticks para validar integridad sin saturar el sistema ni la consola.
 3.  **Inmunología Selectiva**: Intercepta logs del motor, pero ignora el spam repetitivo mediante firmas únicas con TTL (Time-To-Live). Si un asset falta, lo reporta una vez y guarda silencio.
@@ -74,6 +80,18 @@ It's easy to get lost in the philosophy. Here is exactly **what our module does*
 1.  **NO es un Engine**: Vive dentro de DragonRuby. Stargate maneja el flujo lógico, DR el resto.
 2.  **NO escribe código mágicamente**: La AI propone; Stargate valida y mapea.
 3.  **NO es ruidoso**: El silencio es su estado deseable ("Philosophy of Stasis").
+=======
+1.  **Enforces Determinism**: It wraps the standard DragonRuby `tick` loop to ensure that Inputs + State always equal the same Output.
+2.  **Manages Time**: It replaces `Time.now` with a monotonic `tick count`, allowing you to rewind, fast-forward, and replay game states perfectly.
+3.  **Logs Semantics**: It intercepts `puts` and converts logs into structured signals (`[STARGATE_VIEW]`) that external tools can parse to visualize the game's internal state.
+4.  **Protects the Loop**: It wraps your code in a safety net. If your code errors, Stargate catches it, logs the causal node failure, and keeps the engine running (preventing crash-to-desktop).
+5.  **Binds Code to Intent**: Via the Causal Graph, it physically links blocks of code to their YAML definitions. If you delete the YAML node, Stargate functionality allows you to auto-prune the dead code.
+
+### ❌ WHAT IT DOES NOT DO (The Boundaries)
+1.  **It is NOT a Game Engine**: It runs *inside* DragonRuby. DragonRuby handles the rendering, physics, and inputs. Stargate handles the *logic flow*.
+2.  **It does NOT write code for you**: The AI writes the code. Stargate provides the *structure* (the Graph) that tells the AI where to write.
+3.  **It is NOT magic**: It requires discipline. You must register your nodes in `.causal/index.yaml`. If you bypass the system, you lose the benefits.
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 
 ---
 
@@ -101,6 +119,7 @@ This project is designed to be operated by a human **or** an AI acting as a **Co
 
 **Analogy:** ✈️ **The AI is not an autopilot flying wherever it wants.** It’s a trained co-pilot following strict rules.
 
+<<<<<<< HEAD
 ### ⚡ The Ignition Prompt
 To initiate the Stargate Protocol with an AI assistant (like Cursor), use this prompt. It forces the AI to map the project before writing code:
 
@@ -117,6 +136,8 @@ Do not write code without an intent in the map.
 Are you ready?"
 ```
 
+=======
+>>>>>>> bb138ce4c7e11f49833d4fc583e2c6e94318f434
 ### ▶️ Running the Game
 Launch the DragonRuby runtime with Stargate enabled using:
 ```bash
