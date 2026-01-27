@@ -24,6 +24,7 @@ module Stargate
       require "stargate_AI/stability.rb"
       require "stargate_AI/time_travel.rb"
       require "stargate_AI/immunology.rb"
+      require "stargate_AI/recording.rb"
       require "stargate_AI/kernel.rb"
 
       # Initialize subsystems

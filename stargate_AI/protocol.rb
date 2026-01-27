@@ -80,9 +80,15 @@ module Stargate
       end
 
       def write_view(payload)
+        # Technical telemetry for the IA (JSON)
         serialized = payload.respond_to?(:to_json) ? payload.to_json : payload.inspect
-        # Semantic narrative for humans.
         puts "[STARGATE_VIEW] #{serialized}"
+
+        # Human-friendly output for the DragonRuby Console
+        if payload[:entity_id] == :stargate_console
+          message = payload.dig(:event, :data, :message)
+          puts "  #{message}" if message
+        end
       end
 
       def write_trace(payload)

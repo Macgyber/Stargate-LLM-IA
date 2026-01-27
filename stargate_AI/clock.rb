@@ -140,10 +140,18 @@ module Stargate
         Stargate.intent(:trace, { message: "▶️ STARGATE: Simulation RESUMED." }, source: :system)
       end
 
+      def paused?
+        @paused || false
+      end
+
       # Jump to specific coordinates (Internal use or raw jumps)
       def jump_to(branch_id, frame)
         @current_branch = branch_id
         @current_frame = frame
+      end
+
+      def tag_frame(tag)
+        Stargate.intent(:metadata, { frame: current_address, tag: tag }, source: :system)
       end
     end
   end

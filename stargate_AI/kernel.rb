@@ -7,6 +7,7 @@ module Stargate
     # We catch every 'tick' and call super (which finds it in Object/Kernel).
     def tick(args)
       Stargate::Clock.tick(args) do
+        Stargate::Recording.tick(args)
         Stargate::Stability.tick(args)
         # Law of Grace: Ensure the cycle continues.
         begin
