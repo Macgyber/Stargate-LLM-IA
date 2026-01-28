@@ -30,7 +30,8 @@ module Stargate
         if last_lock
           last_time = last_lock.strip.to_f rescue 0.0
 
-          if last_time > @birth_time
+          # Tolerance of 0.01s to prevent floating point rounding errors (self-termination)
+          if last_time > (@birth_time + 0.01)
             # Law of Succession: A newer instance has been born, we must yield
             Stargate.intent(:alert, { message: "☢️ STARGATE: Newer instance detected. Yielding authority..." }, source: :system)
             $gtk.request_quit
@@ -75,8 +76,8 @@ module Stargate
                              intention: "Asset Hot-Reload: #{f}",
                              trace: path)
 
-
-            Stargate.intent(:trace, { message: "Asset Updated: #{f}" }, source: :system)
+            # SIGNAL: We detected a mutation. We acknowledge it once.
+            Stargate.intent(:trace, { message: "🔄 STARGATE: Asset Mutation Detected: #{f}" }, source: :system)
           end
         end
       end

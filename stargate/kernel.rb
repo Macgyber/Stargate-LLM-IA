@@ -10,7 +10,15 @@ module Stargate
       begin
         Stargate::Clock.tick(args) do
           Stargate::Stability.tick(args)
-          begin; super(args); rescue NameError; end
+          begin
+            super(args) 
+          rescue StandardError => e
+            # INTERCEPTION: We caught a runtime error in the game loop.
+            # We report it, but we do NOT let it kill the engine.
+            Stargate.intent(:alert, { message: "🛡️ STARGATE INTERCEPTED: #{e.class}: #{e.message}" }, source: :game)
+          rescue NameError
+            # Swallow NameErrors during hot-reload as per original design
+          end
         end
       rescue => e
         # If Stargate fails, we still need to breathe.

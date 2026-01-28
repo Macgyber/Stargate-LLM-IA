@@ -28,9 +28,9 @@ module Stargate
         
         # We trace this moment visually for the human as a narrative event
         # but only if it's not a standard tick to avoid noise.
-        if moment_type != 'tick'
+        # REFINEMENT: Heartbeats are life, but logging them creates noise. Silence them.
+        if moment_type != 'tick' && moment_type != 'heartbeat'
           icon = case moment_type
-                 when 'heartbeat' then "💓"
                  when 'stasis'    then "💤"
                  else "🌀"
                  end
@@ -73,6 +73,10 @@ module Stargate
       # --- LOW LEVEL IO ---
 
       def write_machine(type, payload)
+        # REFINEMENT: Silence the heartbeat for the machine too, unless debugging.
+        # This prevents the console from scrolling endlessly with JSON.
+        return if type == :MOMENT && !$stargate_debug
+
         serialized = payload.respond_to?(:to_json) ? payload.to_json : payload.inspect
         # Technical telemetry is written to stdout but hidden in common console views if possible.
         # For now, we use the agreed [STARGATE_MOMENT] prefix for machines.
@@ -85,7 +89,7 @@ module Stargate
         puts "[STARGATE_VIEW] #{serialized}"
 
         # Human-friendly output for the DragonRuby Console
-        if payload[:entity_id] == :stargate_console
+        if payload[:entity_id] == :stargate_console || payload[:entity_id] == :stargate_alert
           message = payload.dig(:event, :data, :message)
           puts "  #{message}" if message
         end
