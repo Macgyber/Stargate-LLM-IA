@@ -157,6 +157,10 @@ These are known trade-offs.
 
 ## Documentation
 
+- **Philosophy**: [`DESIGN.md`](DESIGN.md)
+- **Constitution**: [`stargate/docs/CAUSAL_INDEX_LAWS.md`](stargate/docs/CAUSAL_INDEX_LAWS.md)
+- **API Contract**: [`stargate/docs/PUBLIC_CONTRACT.md`](stargate/docs/PUBLIC_CONTRACT.md)
+- **Index Schema**: [`stargate/docs/INDEX_SCHEMA.md`](stargate/docs/INDEX_SCHEMA.md)
 - Technical details: [`stargate/docs/TECHNICAL_DETAILS.md`](stargate/docs/TECHNICAL_DETAILS.md)
 - Causal editing model: [`stargate/docs/architecture/CAUSAL_EDITING_MODEL.md`](stargate/docs/architecture/CAUSAL_EDITING_MODEL.md)
 - Reset tool: `stargate/bin/stargate-reset`

@@ -28,7 +28,7 @@ Desktop.ini
 # OS files
 .DS_Store
 Thumbs.db
-
+.fuente_verdad
 # Logs
 *.log
 logs/

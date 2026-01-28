@@ -40,7 +40,7 @@ The causal index is a structured representation of *why* code exists.
 
 It is stored as a human-readable file (`index.yaml`) and serves as the primary source of truth for intent.
 
-The authoritative rules governing the index are defined in [`CAUSAL_INDEX_LAWS.md`](CAUSAL_INDEX_LAWS.md).
+The authoritative rules governing the index are defined in [`stargate/docs/CAUSAL_INDEX_LAWS.md`](stargate/docs/CAUSAL_INDEX_LAWS.md).
 
 The index is authoritative; source code is not sufficient by itself.
 
