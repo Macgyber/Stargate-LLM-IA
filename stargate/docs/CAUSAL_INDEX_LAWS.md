@@ -36,13 +36,14 @@ All **Business Logic** must be covered by a Causal Node.
 
 ---
 
-## Law 3: Source of Truth
+## Law 3: Derived Representation
 
-The Index is the **Authoritative Source of Truth**; the Code is merely the implementation.
+The Index is a **Derived Representation** of the project's causal structure; the Interposition Layer is the governing authority.
 
-*   **Hierarchy**: Intent > Implementation.
-*   **Discrepancy**: If the Code contradicts the Index, the Code is incorrect (or the Index is outdated). In either case, the conflict must be resolved by aligning the Code to the Index, or updating the Index to reflect the new Intent.
-*   **Primacy**: An LLM must never modify code to fix a bug if doing so violates the declared Intent of the Node. It must request an Index update first.
+*   **Hierarchy**: Reality (Source + Kernel) > Map (Index) > Interpretation (LLM).
+*   **Active Language**: **"Changes to the index do not alter reality; they only alter interpretation."**
+*   **Discrepancy**: If the Code contradicts the Index, the mapping is incomplete or outdated. The priority is to understand the reality of the implementation and then update the map to reflect it accurately.
+*   **Observation**: An LLM should use the index to find where to look, but must always verify truth against the active code and the interposition layer.
 
 ---
 

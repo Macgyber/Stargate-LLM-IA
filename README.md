@@ -1,5 +1,8 @@
 # Stargate-LLM-IA
 
+**"The index is a derived map, not a governing authority."**  
+**"Authority in Stargate resides in the interposition layer, not in documentation artifacts."**
+
 A causal indexing system for controlling how LLMs read and modify code.
 
 ---
@@ -43,6 +46,7 @@ Stargate addresses **intent loss**, not code quality.
 - A refactoring tool
 - A guarantee against bugs
 - A “scale infinitely” solution
+- **A system where an editable index is the primary source of truth**
 
 ---
 

@@ -1,5 +1,8 @@
 # Stargate – Design Document
 
+**"The index is a derived map, not a governing authority."**  
+**"Authority in Stargate resides in the interposition layer, not in documentation artifacts."**
+
 This document explains the design decisions and mental model behind Stargate.
 It is not a usage guide.
 
@@ -38,11 +41,13 @@ Any future capability must respect these constraints.
 
 The causal index is a structured representation of *why* code exists.
 
-It is stored as a human-readable file (`index.yaml`) and serves as the primary source of truth for intent.
+It is a **derived map** used for visibility and LLM guidance. While stored as a human-readable file (`index.yaml`), it is not the governing authority of the system.
+
+**"Changes to the index do not alter reality; they only alter interpretation."**
 
 The authoritative rules governing the index are defined in [`stargate/docs/CAUSAL_INDEX_LAWS.md`](stargate/docs/CAUSAL_INDEX_LAWS.md).
 
-The index is authoritative; source code is not sufficient by itself.
+The index provides necessary context that source code alone cannot convey.
 
 ### 3.2 Causal Node
 
@@ -76,7 +81,9 @@ Stargate operates as a **metadata overlay** on top of the source code.
 - **The Territory**: The actual source code files (`.rb`, `.js`, etc.).
 - **The Map**: The `index.yaml` provided by Stargate.
 
-Legacy development treats the code as the only truth. Stargate asserts that code is merely the implementation of an intent defined in the index. Use logic flows from the Map to the Territory, never the reverse. If code exists without a corresponding node in the Map, it is considered "Ghost Code" and is a candidate for removal.
+Legacy development treats the code as the only truth. Stargate asserts that code is merely the implementation of an intent that we document in the index. However, the map is **derived**. Logical authority flows from the Territory as governed by the Stargate Kernel, which the Map merely reflects. 
+
+If code exists without a corresponding node in the Map, it is considered "Ghost Code"—indicating a mapping failure, not a lack of existence.
 
 ---
 
