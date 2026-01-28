@@ -23,15 +23,13 @@ module Stargate
     class << self
       # Laws of the Machine
       def install!
-      def install!
+
         return if $stargate_installed
         
         # 1. AUTHORITY: Prepend our interposition module to Object
         # This puts us at the head of the chain (Object.ancestors[0]).
         unless Object.ancestors.include?(Stargate::Interposition)
-        # 1. AUTHORITY: Prepend our interposition module to Object
-        # This puts us at the head of the chain (Object.ancestors[0]).
-        unless Object.ancestors.include?(Stargate::Interposition)
+
           Object.prepend(Stargate::Interposition)
         end
 
@@ -58,8 +56,7 @@ module Stargate
         ours = Object.ancestors.include?(Stargate::Interposition) && 
                Object.new.method(:tick).owner == Stargate::Interposition rescue false
         
-        ours = Object.ancestors.include?(Stargate::Interposition) && 
-               Object.new.method(:tick).owner == Stargate::Interposition rescue false
+
         ours
       end
 

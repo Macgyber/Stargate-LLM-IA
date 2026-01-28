@@ -136,7 +136,7 @@ module Stargate
 
       def resume!
         @paused = false
-        @paused = false
+
         Stargate.intent(:trace, { message: "▶️ STARGATE: Simulation RESUMED." }, source: :system)
       end
 

@@ -38,6 +38,9 @@ module Stargate
       
       # Emit boot event (will be dispatched immediately now)
       emit(:boot, mode: mode)
+      
+      # Friendly Welcome Message
+      intent(:trace, { message: "🌌 Stargate Systems Online. What do you want to build today?" }, source: :system)
     end
 
     # 🌌 PUBLIC API: Intent Emission (the only way gameplay speaks)

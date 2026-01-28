@@ -29,7 +29,7 @@ module Stargate
         }
         
         # Standardized output for the Sovereign Observer
-        # Standardized output for the Sovereign Observer
+
         Protocol.write_view(payload)
       end
     end

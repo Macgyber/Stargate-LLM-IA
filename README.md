@@ -116,6 +116,8 @@ Do not modify source files.
 This is an observation phase only.
 ```
 
+You can also use `run` or `dragonruby-run` to launch DragonRuby.
+
 After this, any change must be justified through the causal index.
 
 ---

@@ -96,7 +96,6 @@ module Stargate
         # Reserved channel. No-op for now in console, but ready for file logging.
         # puts "[STARGATE_TRACE] #{serialized}"
       end
-      end
     end
   end
 end

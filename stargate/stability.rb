@@ -6,9 +6,7 @@ module Stargate
     @lock_file = ".stargate_lock"
 
     class << self
-      def install!(args)
-        enforce_single_instance(args)
-        scan_assets(args)
+
       def install!(args)
         enforce_single_instance(args)
         scan_assets(args)
@@ -23,15 +21,15 @@ module Stargate
       private
 
       # Sovereign Law: Only one instance of the world shall exist.
+      # Sovereign Law: Only one instance of the world shall exist.
       def enforce_single_instance(args)
-        @birth_time ||= Time.now.to_i
+        @birth_time ||= Time.now.to_f
         last_lock = args.gtk.read_file(@lock_file)
         
-        # Periodic Authority Verification (every 2 seconds)
-        if args.state.tick_count % 120 == 0 && last_lock
-          last_time = last_lock.strip.to_i rescue 0
-          if last_time > @birth_time
-            # Law of Succession: A newer instance has been born, we must yield
+        # Periodic Authority Verification
+        if last_lock
+          last_time = last_lock.strip.to_f rescue 0.0
+
           if last_time > @birth_time
             # Law of Succession: A newer instance has been born, we must yield
             Stargate.intent(:alert, { message: "☢️ STARGATE: Newer instance detected. Yielding authority..." }, source: :system)
@@ -40,9 +38,7 @@ module Stargate
           end
         end
 
-        # Claim authority on birth
-        if args.state.tick_count == 0
-          args.gtk.write_file(@lock_file, @birth_time.to_s)
+        # Claim authority on birth (and refresh lock to keep it alive if needed in future)
         if args.state.tick_count == 0
           args.gtk.write_file(@lock_file, @birth_time.to_s)
           Stargate.intent(:trace, { message: "Claimed Authority (Birth: #{@birth_time})." }, source: :system)
@@ -67,7 +63,7 @@ module Stargate
           stat = args.gtk.stat_file(path)
           next unless stat
 
-          if @asset_timestamps[path] && stat[:modtime] > @asset_timestamps[path]
+
           if @asset_timestamps[path] && stat[:modtime] > @asset_timestamps[path]
             # Narrative call handled by the intent below.
             args.gtk.reset_sprite(path)
