@@ -18,7 +18,7 @@ This layer governs the active simulation, ensuring that errors are detected and 
 
 This layer governs how code is modified, preventing the "amnesia" and "context explosion" typical of Large Language Models.
 
--   **Causal Index (`stargate_AI/index.yaml`)**: A cognitive map that divides large files into strictly bounded **Causal Nodes** (e.g., `enemies.boss.ai`, `player.input`). It transforms a "file" into a library of logical responsibilities.
+-   **Causal Index (`stargate/index.yaml`)**: A cognitive map that divides large files into strictly bounded **Causal Nodes** (e.g., `enemies.boss.ai`, `player.input`). It transforms a "file" into a library of logical responsibilities.
 -   **Node Surgery Protocol**: When an intent is formed (e.g., "Make the boss faster"), the AI **must** identify the single responsible Node and operate *only* within its defined line ranges. **A Node is the smallest unit of causality. If a change requires touching multiple nodes, the intent must be decomposed into multiple sequential operations.**
 -   **Safe Editing**: Modifications are strictly scoped. Changing the Boss logic cannot break the Player Input because the AI is prohibited from accessing or modifying the Player Input node during that operation.
 
@@ -34,7 +34,7 @@ The power of this model lies in its constraints. Intelligence is defined by what
 ## 4. Lifecycle Synchronization ♻️
 The Index and the Code are one. They are born together and die together.
 
--   **Automatic Synchronization**: When the project is reset (e.g., via `stargate_AI/bin/stargate-reset`), both `app/main.rb` and `stargate_AI/index.yaml` are simultaneously restored to a **Seed State**.
+-   **Automatic Synchronization**: When the project is reset (e.g., via `stargate/bin/stargate-reset`), both `app/main.rb` and `stargate/index.yaml` are simultaneously restored to a **Seed State**.
 -   **No Orphaned Indices**: It is a violation of the model to have Index Nodes pointing to non-existent code. The Index must always reflect the exact reality of the Codebase.
 
 ---

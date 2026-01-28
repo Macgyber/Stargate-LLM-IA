@@ -163,7 +163,7 @@ These are known trade-offs.
 
 ## Documentation
 
-- **Philosophy**: [`DESIGN.md`](DESIGN.md)
+- **Philosophy**: [DESIGN.md](stargate/docs/DESIGN.md)
 - **Constitution**: [`stargate/docs/CAUSAL_INDEX_LAWS.md`](stargate/docs/CAUSAL_INDEX_LAWS.md)
 - **API Contract**: [`stargate/docs/PUBLIC_CONTRACT.md`](stargate/docs/PUBLIC_CONTRACT.md)
 - **Index Schema**: [`stargate/docs/INDEX_SCHEMA.md`](stargate/docs/INDEX_SCHEMA.md)

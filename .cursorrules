@@ -3,12 +3,15 @@
 # YOU ARE THE PILOT OF A CAUSAL SYSTEM. OPERATE WITH SURGICAL PRECISION.
 # THESE LAWS ARE NON-NEGOTIABLE. READ THEM BEFORE EVERY FLIGHT.
 
+# === THE SEVEN LAWS ===
+
 # 1. THE TWIN LAW (COHERENCE)
-#    - [Reality] app/main.rb and [Intent] stargate_AI/index.yaml are CONJOINED TWINS.
+#    - [Reality] app/main.rb and [Intent] stargate/index.yaml are CONJOINED TWINS.
 #    - You CANNOT edit main.rb without updating index.yaml.
 #    - You CANNOT update index.yaml without editing main.rb.
 #    - Discrepancy between Code and Map is a FATAL ERROR.
 #    - Every modification must be anchored to a Causal Node.
+#    - This obligation applies ONLY during the Change Phase.
 
 # 2. THE LAW OF SILENCE (STASIS)
 #    - Silence is the highest form of health. 
@@ -38,38 +41,36 @@
 #    - All randomness must flow through `Stargate::Random`.
 #    - Never use `rand` or `Time.now` for logic; use the Stargate Clock.
 
-=======
-# STARGATE-LLM-IA: THE TWIN LAW
-# -----------------------------------------------------------------------------
-# YOU ARE BOUND BY A SACRED CONTRACT. READ THIS BEFORE ACTING.
-#
-# 1. THE TWIN PRINCIPLE
-#    The file `app/main.rb` and the file `stargate_AI/index.yaml` are CONJOINED TWINS.
-#    They share a single life force.
-#    - You CANNOT edit `app/main.rb` without updating `stargate_AI/index.yaml`.
-#    - You CANNOT update `stargate_AI/index.yaml` without editing `app/main.rb`.
-#    - Discrepancy between Code (Reality) and Graph (Intent) is FATAL ERROR.
-#
-# 2. THE ENFORCEMENT
-#    Every time you modify the code:
-#    a) LOCATE the specific Node in `stargate_AI/index.yaml` responsible for that logic.
-#    b) UPDATE the `lines` or `ranges` in the YAML to match the new reality.
-#    c) UPDATE the `description` if the logic changed.
-#
-# 3. THE PENALTY
-#    If you generate code without updating the index, you have broken the chain of causality.
-#    The system will treat your code as "Hallucination" and it may be purged.
-#
-# 4. HOW TO THINK
-#    Do not think: "I will add a function."
-#    Think: "I will expand the [PresentationNode] in the Causal Graph."
-#
-# 5. SOURCE OF TRUTH (ANTI-HALLUCINATION)
-#    You MUST search for any directory named `samples` in the project tree.
-#    Consider these the **Sovereign Ingredients**. 
-#    Use them as the primary source of knowledge to build and expand the 
-#    project, ensuring even offline/local intelligence remains accurate.
-#    DO NOT invent patterns that contradict these samples.
-#
-# SIGNED: THE SOVEREIGN ARCHITECT
+# 7. THE DERIVED INDEX PROTOCOL
+#    - The Causal Index (stargate/index.yaml) is a derived artifact.
+#    - During observation or planning, DO NOT complete or modify it unless explicitly instructed.
+#    - An empty index is a valid state; mapping requires explicit human authorization.
+#    - If stargate/index.yaml exists and is empty, NO ACTION is required.
+
+# === OPERATIONAL DIRECTIVES ===
+
+# GOLDEN RULE: 
+# "If you cannot justify a change by citing a Causal Node ID, the change must not happen."
+
+# 1. PHASE IDENTIFICATION
+#    - Mapping Phase: Observation only. NO CODE MODIFICATION.
+#    - Change Phase: Code modification allowed ONLY with a cited Causal Node ID.
+
+# 2. GHOST CODE PROTOCOL
+#    - If you encounter logic not traceable to any node in index.yaml:
+#      1. HALT. 2. REPORT the location. 3. QUERY the human (Create node? Attach? Delete?).
+
+# 3. FORBIDDEN BEHAVIOR
+#    - Do NOT refactor for style, cleanliness, or optimization unless explicitly requested.
+#    - Do NOT infer intent from code alone.
+#    - Do NOT modify files outside the cited node’s declared territory.
+
+# 4. DEFAULT STANCE
+#    - Be conservative. Prefer stopping over guessing. Ask before acting.
+#    - Your role is to protect intent, not to "improve" code.
+
+# 5. REFERENCE DOCUMENTS
+#    - stargate/docs/CAUSAL_INDEX_LAWS.md
+#    - stargate/docs/INDEX_SCHEMA.md
+#    - stargate/docs/PUBLIC_CONTRACT.md
 # -----------------------------------------------------------------------------
