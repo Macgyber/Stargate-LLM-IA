@@ -1,5 +1,19 @@
 # Stargate Causal Index - Zero State (Seed)
 # This file serves as the clean template for new projects.
 # It should NOT contain user-specific configurations or file bindings.
+# This file may remain minimal or empty indefinitely.
+# Only add nodes when you want LLM-assisted changes.
 
-nodes: []
+nodes:
+  - id: system-bootstrap
+    intent: >
+      Execution environment initialization. Basic lifecycle configuration and Stargate context setup.
+    responsibility:
+      - bootstrap
+      - Stargate context
+    implementation:
+      files:
+        - app/main.rb
+    depends_on: []
+    status: stable
+

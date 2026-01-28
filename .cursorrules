@@ -12,6 +12,7 @@
 #    - Discrepancy between Code and Map is a FATAL ERROR.
 #    - Every modification must be anchored to a Causal Node.
 #    - This obligation applies ONLY during the Change Phase.
+#    - The Twin Law applies ONLY to files explicitly indexed as Host Territory.
 
 # 2. THE LAW OF SILENCE (STASIS)
 #    - Silence is the highest form of health. 
@@ -46,6 +47,18 @@
 #    - During observation or planning, DO NOT complete or modify it unless explicitly instructed.
 #    - An empty index is a valid state; mapping requires explicit human authorization.
 #    - If stargate/index.yaml exists and is empty, NO ACTION is required.
+
+# 8. NODE PRESERVATION RULE
+#    - Existing Causal Nodes MUST NOT be modified, renamed, or replaced
+#      without explicit human authorization.
+#    - During observation or mapping, the LLM may PROPOSE new nodes
+#      or refactors, but MUST NOT apply them.
+#    - Index mutations require the same level of authorization as code changes.
+
+# 9. THE INVISIBILITY PROTOCOL (HOST ONLY)
+#    - The Causal Index and its nodes MUST ONLY describe the Host Territory (the application/game).
+#    - Strictly FORBIDDEN to map, cite, or propose nodes for files within the `stargate/` directory.
+#    - Stargate is infrastructure; it observes but is never the subject of the mapping.
 
 # === OPERATIONAL DIRECTIVES ===
 
