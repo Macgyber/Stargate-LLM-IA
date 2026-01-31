@@ -1,14 +1,12 @@
-# frozen_string_literal: true
 
 module Stargate
   module Protocol
-    class << self
-      # --- CHANNELS ---
-      # [STARGATE_MOMENT] -> Machine/IA (Technical state)
-      # [STARGATE_VIEW]   -> Human (Semantic narrative)
-      # [STARGATE_TRACE]  -> Reserved (Post-mortem/Replay)
+    # --- CHANNELS ---
+    # [STARGATE_MOMENT] -> Machine/IA (Technical state)
+    # [STARGATE_VIEW]   -> Human (Semantic narrative)
+    # [STARGATE_TRACE]  -> Reserved (Post-mortem/Replay)
 
-      def emit_moment(address, state_packet, seed, moment_type = 'tick')
+    def self.emit_moment(address, state_packet, seed, moment_type = 'tick')
         payload = {
           type: "moment",
           address: address,
@@ -38,7 +36,7 @@ module Stargate
         end
       end
 
-      def emit_divergence(address, expected_hash, actual_hash)
+      def self.emit_divergence(address, expected_hash, actual_hash)
         payload = {
           type: "divergence",
           address: address,
@@ -54,7 +52,7 @@ module Stargate
         Stargate.intent(:divergence, payload, source: :system)
       end
 
-      def emit_branch(new_id, parent_id, divergence_frame)
+      def self.emit_branch(new_id, parent_id, divergence_frame)
         payload = {
           type: "branch",
           id: new_id,
@@ -72,7 +70,7 @@ module Stargate
 
       # --- LOW LEVEL IO ---
 
-      def write_machine(type, payload)
+      def self.write_machine(type, payload)
         # REFINEMENT: Silence the heartbeat for the machine too, unless debugging.
         # This prevents the console from scrolling endlessly with JSON.
         return if type == :MOMENT && !$stargate_debug
@@ -83,23 +81,26 @@ module Stargate
         puts "[STARGATE_#{type}] #{serialized}"
       end
 
-      def write_view(payload)
-        # Technical telemetry for the IA (JSON)
-        serialized = payload.respond_to?(:to_json) ? payload.to_json : payload.inspect
-        puts "[STARGATE_VIEW] #{serialized}"
+      def self.write_view(payload)
+        # 1. Technical Telemetry (JSON) - Only if in debug mode to avoid noise
+        if $stargate_debug
+          serialized = payload.respond_to?(:to_json) ? payload.to_json : payload.inspect
+          puts "[STARGATE_VIEW] #{serialized}"
+        end
 
-        # Human-friendly output for the DragonRuby Console
-        if payload[:entity_id] == :stargate_console || payload[:entity_id] == :stargate_alert
-          message = payload.dig(:event, :data, :message)
-          puts "  #{message}" if message
+        # 2. Human narrative: Only report alerts, divergences or meaningful system changes.
+        event_data = payload[:event]
+        is_alert = payload[:entity_id] == :stargate_alert || (event_data && event_data[:type] == :alert)
+        if event_data && (event_data[:level] == :error || event_data[:level] == :warning || is_alert)
+          message = event_data.dig(:data, :message) || event_data[:message]
+          puts "🛑 STARGATE ALERT: #{message}" if message
         end
       end
 
-      def write_trace(payload)
+      def self.write_trace(payload)
         serialized = payload.respond_to?(:to_json) ? payload.to_json : payload.inspect
         # Reserved channel. No-op for now in console, but ready for file logging.
         # puts "[STARGATE_TRACE] #{serialized}"
       end
-    end
   end
 end

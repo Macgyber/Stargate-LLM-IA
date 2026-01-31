@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 
 module Stargate
   # The Surgeon of Code.
@@ -7,15 +6,14 @@ module Stargate
     @trial_state = nil
     @pending_evals = []
 
-    class << self
-      # Capture a state checkpoint for potential rollback.
-      def checkpoint
+    # Capture a state checkpoint for potential rollback.
+    def self.checkpoint
         @trial_state = State.capture
       end
 
       # Perform the scheduled injections for the CURRENT frame only.
       # This is called within the Clock's protected block.
-      def perform_injections
+      def self.perform_injections
         address = Clock.current_address
         
         # Law of Isolation: Only execute what belongs to this moment.
@@ -33,7 +31,7 @@ module Stargate
 
       # Schedule a snippet for the next ritual.
       # Sovereign Law: Every intention must be anchored to an address.
-      def schedule(snippet)
+      def self.schedule(snippet)
         State.mark_dirty(:logic, 
                          source: :injection, 
                          intention: "Code Injection scheduled",
@@ -48,7 +46,7 @@ module Stargate
       end
 
       # Restore state to the checkpoint captured before the failed injection.
-      def rollback!
+      def self.rollback!
         if @trial_state
           $gtk.console.log "⏪ Reverting to pre-injection speculative state..."
           # Fix: @trial_state is a Hash {data: ..., hash: ...}, apply takes raw data.
@@ -58,7 +56,7 @@ module Stargate
       end
 
       # Purge all intentions. Used during time-travel.
-      def reset!
+      def self.reset!
         @pending_evals.clear
         @trial_state = nil
       end

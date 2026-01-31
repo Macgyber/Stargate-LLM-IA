@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Stargate
   # The DNA of a Decision.
   # Represents a single causal transition in the universe.
@@ -45,88 +43,87 @@ module Stargate
     }
     @last_causal_node = nil
 
-    class << self
-      attr_reader :last_causal_node
+    def self.last_causal_node
+      @last_causal_node
+    end
 
-      # --- CAUSAL API ---
+    # --- CAUSAL API ---
 
-      # Mark the universe as changed.
-      # Sovereign Law: No mutation shall occur without a cause.
-      def mark_dirty(type, source:, intention:, trace: nil)
-        return unless @dirty.key?(type)
+    # Mark the universe as changed.
+    # Sovereign Law: No mutation shall occur without a cause.
+    def self.mark_dirty(type, source:, intention:, trace: nil)
+      return unless @dirty.key?(type)
 
-        @dirty[type] = true
-        @last_causal_node = CausalNode.new(
-          source: source,
-          intention: intention,
-          trace: trace
-        )
+      @dirty[type] = true
+      @last_causal_node = CausalNode.new(
+        source: source,
+        intention: intention,
+        trace: trace
+      )
+      
+      # We don't log or capture here. 
+      # We only acknowledge the deviation from stasis.
+    end
+
+    def self.dirty?
+      @dirty.values.any?
+    end
+
+    def self.dirty_types
+      @dirty.select { |_, v| v }.keys
+    end
+
+    def self.clear_dirty!
+      @dirty.each_key { |k| @dirty[k] = false }
+      @last_causal_node = nil
+    end
+
+    # --- LEGACY/UTILITY API (Hardened for Cross-Platform) ---
+
+    def self.capture
+      begin
+        raw_data = $gtk.serialize_state
+        return nil unless raw_data
         
-        # We don't log or capture here. 
-        # We only acknowledge the deviation from stasis.
+        hash = "#{raw_data.length}_#{raw_data.hash}"
+        save_to_disk(hash, raw_data)
+        
+        { data: raw_data, hash: hash }
+      rescue => e
+        # Silently fail if capture is impossible (Anti-Pattern Avoidance)
+        nil
       end
+    end
 
-      def dirty?
-        @dirty.values.any?
-      end
+    def self.save_to_disk(hash, data)
+      return if hash == "000000"
+      # DragonRuby's write_file handles directory creation natively (Cross-Platform).
+      $gtk.write_file(".stargate/blobs/#{hash}", data)
+    end
 
-      def dirty_types
-        @dirty.select { |_, v| v }.keys
-      end
+    def self.load_from_disk(hash)
+      data = $gtk.read_file(".stargate/blobs/#{hash}")
+      return nil unless data
 
-      def clear_dirty!
-        @dirty.each_key { |k| @dirty[k] = false }
-        @last_causal_node = nil
-      end
+      # Law of Historical Integrity
+      computed = "#{data.length}_#{data.hash}"
+      raise "CRITICAL: State Integrity Violation!" if computed != hash
+      data
+    end
 
-      # --- LEGACY/UTILITY API (Hardened for Cross-Platform) ---
-
-      def capture
-        begin
-          raw_data = $gtk.serialize_state
-          return nil unless raw_data
-          
-          hash = "#{raw_data.length}_#{raw_data.hash}"
-          save_to_disk(hash, raw_data)
-          
-          { data: raw_data, hash: hash }
-        rescue => e
-          # Silently fail if capture is impossible (Anti-Pattern Avoidance)
-          nil
-        end
-      end
-
-      def save_to_disk(hash, data)
-        return if hash == "000000"
-        # DragonRuby's write_file handles directory creation natively (Cross-Platform).
-        $gtk.write_file(".stargate/blobs/#{hash}", data)
-      end
-
-      def load_from_disk(hash)
-        data = $gtk.read_file(".stargate/blobs/#{hash}")
-        return nil unless data
-
-        # Law of Historical Integrity
-        computed = "#{data.length}_#{data.hash}"
-        raise "CRITICAL: State Integrity Violation!" if computed != hash
-        data
-      end
-
-      # Law of Rebirth: Restore reality from raw data.
-      # CONTRACT: This is a sovereign operation; it is not automatically reversible.
-      def apply(raw_data)
-        begin
-          restored = $gtk.deserialize_state(raw_data)
-          if restored
-            $gtk.args.state = restored
-            :ok
-          else
-            :divergent
-          end
-        rescue => e
-
+    # Law of Rebirth: Restore reality from raw data.
+    # CONTRACT: This is a sovereign operation; it is not automatically reversible.
+    def self.apply(raw_data)
+      begin
+        restored = $gtk.deserialize_state(raw_data)
+        if restored
+          $gtk.args.state = restored
+          :ok
+        else
           :divergent
         end
+      rescue => e
+        :divergent
       end
     end
   end

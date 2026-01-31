@@ -1,16 +1,30 @@
-# frozen_string_literal: true
 
 # Stargate Core: The Sovereign API
 # This is the single entry point for the Catalyst Runtime.
 # Law of Silence: Internal organs are hidden; only the interface speaks.
 module Stargate
-  class << self
-    def initialize_context(args, mode: :standard)
-      return if @active || @bootstrapping
+  def self.initialize_context(args, heartbeat: false, mode: :standard)
+      # 11. Sistema vivo: Sincronización continua de identidad.
+      @args = args if args
+      
+      # DISPARADOR SOBERANO: 
+      # Si el script se re-ejecuta (toplevel call) mientras ya estamos activos, detectamos mutación.
+      if $stargate_active && args && !heartbeat
+         unless Vigilante.interrupted || $stargate_sanctioned_reset
+            Vigilante.shout!(:unsanctioned_mutation, "Structural Mutation Detected: Script re-executed without Causal Intent.")
+         end
+         
+         # Limpiamos el flag de reset sancionado una vez usado
+         $stargate_sanctioned_reset = false
+         Vigilante.install!(args)
+         Stability.install!(args)
+         return
+      end
+
+      return if $stargate_active || @bootstrapping
 
       @bootstrapping = true
       @event_buffer  = []
-      @args          = args
       @mode          = mode
 
       # Internals are loaded in order of dependency
@@ -23,28 +37,27 @@ module Stargate
       require "stargate/stability.rb"
       require "stargate/time_travel.rb"
       require "stargate/immunology.rb"
+      require "stargate/vigilante.rb"
+      require "stargate/diagnose.rb" 
+      require "stargate/ledger_keeper.rb"
       require "stargate/kernel.rb"
 
       # Initialize subsystems
       bootstrap(args)
-      Stargate::Stability.install!(args)
+      Stargate::Random.bootstrap_seed!(args) if args 
+      Stargate::Stability.install!(args) if args
+      Stargate::Vigilante.install!(args) if args
 
-      # Two-phase activation: now ready to dispatch
-      @active = true
       @bootstrapping = false
+      $stargate_active = true if args
       
-      # Flush buffered events from initialization
-      flush_buffered_events
-      
-      # Emit boot event (will be dispatched immediately now)
-      emit(:boot, mode: mode)
-      
-      # Friendly Welcome Message
-      intent(:trace, { message: "🌌 Stargate Systems Online. What do you want to build today?" }, source: :system)
+      flush_buffered_events if $stargate_active
+      emit(:boot, mode: mode)      # Friendly Welcome Message
+      # intent(:trace, { message: "🌌 Stargate Systems Online. What do you want to build today?" }, source: :system) if $stargate_active
     end
 
     # 🌌 PUBLIC API: Intent Emission (the only way gameplay speaks)
-    def intent(type, payload = {}, **options)
+    def self.intent(type, payload = {}, **options)
       source = options[:source] || :gameplay
       event = {
         type: type,
@@ -61,7 +74,7 @@ module Stargate
       end
 
       # Law of Runtime: Only active systems dispatch
-      return unless @active
+      return unless active?
 
       # CAUSAL LINK: Every gameplay intent marks the state as dirty.
       if source == :gameplay
@@ -75,7 +88,7 @@ module Stargate
     end
 
     # 🔍 PUBLIC API: Status (read-only, for editors/AI)
-    def status
+    def self.status
       {
         active: @active,
         mode: @mode,
@@ -85,27 +98,35 @@ module Stargate
     end
 
     # 🎮 PUBLIC API: Manual Controls (legacy compatibility)
-    def capture!
-      Stargate::TimeTravel.capture_moment(@args) if @active
+    def self.capture!
+      Stargate::TimeTravel.capture_moment(@args) if active?
     end
 
-    def recall!
+    def self.recall!
       capsule = Stargate::TimeTravel.last_valid_capsule
       Stargate::TimeTravel.recall_moment(capsule) if capsule
     end
 
-    def test_chaos!
-      Stargate::Chaos.induce_failure if const_defined?(:Chaos)
+    def self.reset_world!
+      return unless active?
+      
+      # Ritual de purificación: Resolvemos el interrupt persistente
+      # Marcamos la próxima recarga como 'sancionada'
+      $stargate_sanctioned_reset = true
+      Vigilante.resolve!(@args)
+      Clock.resume!
+      
+      intent(:trace, { message: "🛡️ Stargate: Ritual of Purification complete. Causal integrity restored." }, source: :system)
     end
 
-    def active?
-      @active || false
+    def self.active?
+      $stargate_active || false
     end
 
     private
 
     # Internal: Dispatch events to all interested parties
-    def dispatch(event)
+    def self.dispatch(event)
       View.handle_event(event)
       # Future:
       # Timeline.record(event)
@@ -113,17 +134,17 @@ module Stargate
     end
 
     # Internal: Flush buffered events from bootstrap
-    def flush_buffered_events
+    def self.flush_buffered_events
       @event_buffer.each { |event| dispatch(event) }
       @event_buffer.clear
     end
 
     # Internal: System emits events with :system source
-    def emit(type, payload = {})
+    def self.emit(type, payload = {})
       intent(type, payload, source: :system)
     end
 
-    def bootstrap(args)
+    def self.bootstrap(args)
       # Establish Sovereignty
       Stargate::Bootstrap.engage!
       
@@ -134,6 +155,5 @@ module Stargate
       when :silent
         $stargate_debug = false
       end
-    end
   end
 end

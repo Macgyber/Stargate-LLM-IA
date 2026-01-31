@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 
 module Stargate
   module Clock
@@ -6,10 +5,9 @@ module Stargate
     @current_frame  = 0
     @branch_forest   = {}      # Memory of all branch relationships
 
-    class << self
-      attr_reader :current_branch, :current_frame
+    attr_reader :current_branch, :current_frame
 
-      def tick(args)
+    def self.tick(args)
         # Law XVII: Continuous Determinism via Seed Locking
         # We use a deterministic seed derived from tick_count.
         frame_seed = (args.state.tick_count + 1) * 1000
@@ -19,7 +17,7 @@ module Stargate
         end
       end
 
-      def with_frame(seed, inputs)
+      def self.with_frame(seed, inputs)
         if @paused
           is_heartbeat = ($gtk.args.state.tick_count % 60 == 0)
           Protocol.emit_moment(current_address, { hash: "PAUSED" }, seed, "stasis") if is_heartbeat
@@ -80,13 +78,13 @@ module Stargate
         end
       end
 
-      def current_address
+      def self.current_address
         "#{@current_branch}@#{@current_frame}"
       end
 
       # Fork the timeline (branching)
       # Sovereign Law: Branching requires a hash to anchor authority.
-      def branch!(divergence_frame, parent_id = @current_branch, hash:)
+      def self.branch!(divergence_frame, parent_id = @current_branch, hash:)
         # Law of Isolation: Branches start with a clean slate of intentions.
         Injection.reset!
         
@@ -128,19 +126,19 @@ module Stargate
         end
       end
 
-      def pause!
+      def self.pause!
         @paused = true
         Random.reset!
         Stargate.intent(:trace, { message: "🛑 STARGATE: Simulation PAUSED (Stasis Mode)." }, source: :system)
       end
 
-      def resume!
+      def self.resume!
         @paused = false
 
         Stargate.intent(:trace, { message: "▶️ STARGATE: Simulation RESUMED." }, source: :system)
       end
 
-      def paused?
+      def self.paused?
         @paused || false
       end
 

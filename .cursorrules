@@ -60,6 +60,12 @@
 #    - Strictly FORBIDDEN to map, cite, or propose nodes for files within the `stargate/` directory.
 #    - Stargate is infrastructure; it observes but is never the subject of the mapping.
 
+# 10. THE LAW OF VIGILANCE (THE SHOUT)
+#    - If you see `[VIGILANTE_INTERRUPT]`, YOU MUST STOP IMMEDIATELY.
+#    - You are FORBIDDEN from attempting new intents until the interruption is resolved.
+#    - Resolution means identifying the error, fixing the code, and verifying it in the console.
+#    - The Vigilante is the only authority that can resume the world.
+
 # === OPERATIONAL DIRECTIVES ===
 
 # GOLDEN RULE: 
@@ -80,6 +86,8 @@
 
 # 4. DEFAULT STANCE
 #    - Be conservative. Prefer stopping over guessing. Ask before acting.
+#    - If Vigilante interrupts, assume the world is ontologically broken.
+#    - Your priority #1 is fixing the breach, not continuing the feature.
 #    - Your role is to protect intent, not to "improve" code.
 
 # 5. REFERENCE DOCUMENTS
