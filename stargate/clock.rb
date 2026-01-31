@@ -151,6 +151,5 @@ module Stargate
       def tag_frame(tag)
         Stargate.intent(:metadata, { frame: current_address, tag: tag }, source: :system)
       end
-    end
   end
 end

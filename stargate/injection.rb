@@ -60,8 +60,5 @@ module Stargate
         @pending_evals.clear
         @trial_state = nil
       end
-
-      private
-    end
   end
 end

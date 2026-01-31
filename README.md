@@ -92,9 +92,15 @@ mygame/
 Activate Stargate in `app/main.rb`:
 
 ```ruby
+# At the top of the file, outside tick
+require "stargate/bootstrap.rb"
+
+# Establish sovereignty before first tick
+Stargate.initialize_context(nil)
+
 def tick(args)
-  require "stargate/bootstrap.rb"
-  Stargate.initialize_context(args)
+  # Heartbeat on each frame
+  Stargate.initialize_context(args, heartbeat: true)
 
   # Game logic continues normally
 end
