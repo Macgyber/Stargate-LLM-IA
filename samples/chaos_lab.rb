@@ -20,9 +20,13 @@ def tick args
     unless Stargate.status[:booted]
       Stargate.initialize_context(args)
       Stargate.reset_world!
+      $stargate_debug = true
     end
 
-    # Handle Verification Inputs
+    # --- MANUAL VERIFICATION PLAYGROUND ---
+    # No automated sequences are enforced here.
+    # Decisions are left to the Human-in-the-loop.
+
     handle_chaos_inputs(args)
 
     # Bridge Flow Control
@@ -53,8 +57,23 @@ def handle_chaos_inputs(args)
     Stargate::Clock.resume! unless $stargate_stasis_requested
   end
 
+  if args.inputs.keyboard.key_down.l
+    puts "📖 [LEDGER] Initiating Structural Audit..."
+    $stargate_audit_report = Stargate::LedgerKeeper.audit!(args)
+  end
+
+  if args.inputs.keyboard.key_down.k
+    if $stargate_audit_report && ($stargate_audit_report[:ghosted].any? || $stargate_audit_report[:status] == :violations)
+      puts "⚖️ [JUDGEMENT] Causal Debt Accepted. Enacting Stasis."
+      $stargate_stasis_requested = true
+    else
+      puts "⚖️ [JUDGEMENT] No critical debt to accept."
+    end
+  end
+
   if args.inputs.keyboard.key_down.r
     $stargate_fail_safe = nil
+    $stargate_audit_report = nil
     puts "🩹 RECOVERY: Sanctioned Fail-Safe Reset."
   end
 end
@@ -63,15 +82,43 @@ def run_simulated_game(args)
   args.state.counter ||= 0
   args.state.counter += 1
   
+  # Main HUD
   args.outputs.labels << {
-    x: 640, y: 400,
+    x: 640, y: 440,
     text: "Game Logic Running: #{args.state.counter}",
     alignment_enum: 1, size_enum: 2, r: 255, g: 255, b: 255
   }
 
+  # LEDGER HUD (The Book of Truth)
+  if $stargate_audit_report
+    r = $stargate_audit_report
+    color = (r[:ghosted].any? ? [255, 100, 100] : [100, 255, 100])
+    summary = "LEDGER: Births: #{r[:birthed].size} | Ghosts: #{r[:ghosted].size}"
+    
+    args.outputs.labels << {
+      x: 640, y: 380,
+      text: summary,
+      alignment_enum: 1, size_enum: 1, r: color[0], g: color[1], b: color[2]
+    }
+    
+    if r[:ghosted].any?
+      args.outputs.labels << {
+        x: 640, y: 350,
+        text: "GHOST NODES DETECTED: #{r[:ghosted].join(', ')}",
+        alignment_enum: 1, size_enum: -1, r: 255, g: 50, b: 50
+      }
+    end
+  end
+
   args.outputs.labels << {
-    x: 640, y: 350,
-    text: "[C] Crash  |  [S] Toggle Stasis  |  [R] Reset Fail-Safe",
+    x: 640, y: 150,
+    text: "[C] Crash | [S] Stasis | [L] Audit Ledger | [K] Accept Truth | [R] Reset",
     alignment_enum: 1, size_enum: 0, r: 150, g: 150, b: 150
+  }
+
+  args.outputs.labels << {
+    x: 640, y: 120,
+    text: "MANUAL VERIFICATION PLAYGROUND - NO AUTO-ENFORCEMENT",
+    alignment_enum: 1, size_enum: -2, r: 100, g: 100, b: 100
   }
 end

@@ -6,7 +6,7 @@ module Stargate
     # =========================
     # ENTRY POINT (Manual/Offline Only)
     # =========================
-    def self.audit!(args)
+    def self.audit!(args, enforce: false)
       # LEY 3 & 6: Authority via args. No auto-run.
       now = Time.now.to_i
       observed = scan_app_for_nodes(args)
@@ -120,8 +120,8 @@ module Stargate
     # =========================
     # LEDGER IO (PRIMITIVE)
     # =========================
-    def self.load_ledger(now)
-      content = $gtk.read_file(LEDGER_FILE)
+    def self.load_ledger(args, now)
+      content = args.gtk.read_file(LEDGER_FILE)
       if content
         parse_ledger(content)
       else
@@ -181,7 +181,7 @@ module Stargate
       ledger
     end
 
-    def self.save_ledger(ledger)
+    def self.save_ledger(args, ledger)
       lines = []
       lines << "metadata:"
       ledger["metadata"].each do |k, v|
@@ -197,13 +197,13 @@ module Stargate
         end
       end
 
-      $gtk.write_file(LEDGER_FILE, lines.join("\n"))
+      args.gtk.write_file(LEDGER_FILE, lines.join("\n"))
     end
 
     # =========================
     # STASIS
     # =========================
-    def self.enforce_stasis!(ledger)
+    def self.enforce_stasis!(ledger, notify: true)
       pending = []
       ghosts  = []
 
@@ -213,12 +213,16 @@ module Stargate
       end
 
       if pending.any? || ghosts.any?
-        msg = "Ledger Stasis Invoked.\n"
-        msg += "Pending Sanction: #{pending.map { |n| n['id'] }.join(', ')}\n" if pending.any?
-        msg += "Ghost Nodes (Amputed): #{ghosts.map { |n| n['id'] }.join(', ')}" if ghosts.any?
+        msg = "Ledger Violation Detected.\n"
+        msg += "Pending: #{pending.map { |n| n['id'] }.join(', ')}\n" if pending.any?
+        msg += "Ghosts: #{ghosts.map { |n| n['id'] }.join(', ')}" if ghosts.any?
         
-        Stargate::Vigilante.shout!(:ledger_violation, msg)
+        if notify
+          Stargate::Vigilante.shout!(args, :ledger_violation, msg)
+        end
+        return msg
       end
+      nil
     end
   end
 end
