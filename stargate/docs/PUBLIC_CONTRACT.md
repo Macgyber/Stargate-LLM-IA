@@ -14,7 +14,7 @@ These methods are the **only** entry points an external system (Game or Editor) 
 ### `Stargate.initialize_context(args, mode: :standard)`
 
 *   **Role:** Bootstrapping / Instrumentation.
-*   **Promise:** Idempotent. safe to call every frame (returns early if initialized).
+*   **Promise:** Idempotent. safe to call during the boot phase. In the **Sovereign Bridge** architecture, it is traditionally called once by the Bridge.
 *   **Side Effects:** Attaches observability hooks. Does **not** alter game logic execution flow.
 *   **Parameters:**
     *   `args`: Host environment object (see *Host Contract* below).
@@ -36,9 +36,11 @@ These methods are the **only** entry points an external system (Game or Editor) 
 *   **Role:** Health check.
 *   **Promise:** Returns a simple Hash with no side effects.
 *   **Returns:**
-    *   `active`: Boolean.
-    *   `paused`: Boolean.
-    *   `mode`: Symbol.
+    *   `active`: Boolean. Stargate is initialized.
+    *   `interrupted`: Boolean. Vigilante has detected a violation.
+    *   `booted`: Boolean. Bootstrap sequence completed.
+    *   `stasis_requested`: Boolean. A subsystem has proposed pausing the clock.
+    *   `fail_safe`: Boolean. The system is running in emergency fallback mode due to a crash.
 
 ---
 

@@ -10,34 +10,48 @@ INDEX_YAML_PATH = File.join(PROJECT_ROOT, 'stargate', 'index.yaml')
 
 # Seed Content for app/main.rb
 MAIN_RB_SEED = <<~RUBY
-  # --- STARGATE-LLM-IA START ---
+  # --- STARGATE-SOVEREIGN-BRIDGE START ---
   require "stargate/bootstrap.rb"
 
-  def tick(args)
-    Stargate.activate!(args)
-    # --- STARGATE-LLM-IA END ---
+  def tick args
+    # Law 1.1: Render First (Pulse)
+    Stargate::Avatar.render(args, fail_safe: $stargate_fail_safe)
+    
+    begin
+      unless Stargate.status[:booted]
+        Stargate.initialize_context(args)
+      end
 
-    # Your sovereign simulation begins here.
+      # Your sovereign simulation begins here
+      run_game_tick(args)
+    rescue => e
+      # Law 10.1: Fail-Safe Visual
+      $stargate_fail_safe = e
+    end
+  end
+
+  def run_game_tick(args)
     args.outputs.labels << {
       x: 640, y: 360,
       text: "Stargate: Sovereign Flow Active (Seed State)",
       alignment_enum: 1, r: 0, g: 151, b: 231
     }
   end
+  # --- STARGATE-SOVEREIGN-BRIDGE END ---
 RUBY
 
 # Seed Content for stargate/index.yaml
 INDEX_YAML_SEED = <<~YAML
   version: 1.0.0
-  last_updated: #{Date.today.iso8601}
+  updated_at: #{Date.today.iso8601}
   context: "New Stargate Project (Seed State)"
 
   nodes:
     system.core:
-      description: "Runtime entry point, Stargate activation, and main loop definition"
+      description: "Sovereign Bridge entry point and main loop definition"
       files:
         - path: "app/main.rb"
-          ranges: ["1-14"]
+          ranges: ["1-23"]
       primary_responsibility: "Boot & Lifecycle"
       dependencies: ["stargate/bootstrap.rb"]
 YAML

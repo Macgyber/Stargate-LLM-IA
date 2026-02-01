@@ -109,11 +109,11 @@ module Stargate
       args.outputs.labels << [640, 660, "🛑 VIGILANTE INTERRUPT: SOVEREIGN STASIS", 10, 1, 255, 255, 255]
       
       # 4. Violation Details
-      args.outputs.labels << [640, 450, "ID: #{violation[:type].to_s.upcase}", 5, 1, 255, 100, 100]
-      args.outputs.labels << [640, 400, violation[:message], 2, 1, 230, 230, 230]
+      args.outputs.labels << [640, 450, "ID: #{(violation[:type] || 'UNKNOWN').to_s.upcase}", 5, 1, 255, 100, 100]
+      args.outputs.labels << [640, 400, (violation[:message] || 'No detail available'), 2, 1, 230, 230, 230]
       
       # 5. Causal Context
-      args.outputs.labels << [640, 320, "DEBT RECORDED AT TICK: #{violation[:tick]}", 0, 1, 150, 150, 150]
+      args.outputs.labels << [640, 320, "DEBT RECORDED AT TICK: #{violation[:tick] || 0}", 0, 1, 150, 150, 150]
       
       # 6. Ritual of Purification Instructions
       pulse = (Math.sin(Time.now.to_f * 5) * 50 + 205).to_i

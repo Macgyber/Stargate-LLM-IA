@@ -7,14 +7,11 @@ A causal indexing system for controlling how LLMs read and modify code.
 
 ---
 
-## What is this?
+Stargate is a **Sovereign Causal SDK** for LLM-assisted development.
 
-Stargate is a **control layer for LLM-assisted development**.
-
-It introduces an explicit, human-maintained **causal index** that records *why* code exists, and forces an LLM to reference that intent before proposing or applying changes.
-
-Stargate does not generate features, refactor code automatically, or replace human decisions.  
-Its purpose is to **reduce unintended changes and loss of intent** when working with LLMs on an existing codebase.
+It functions as a technical library/runtime that provides:
+1.  **A Sovereign Runtime Layer**: A safety-first interposition layer (The Bridge) that provides **execution continuity and failure visibility**.
+2.  **A Causal Index**: A mapping of intent over code, establishing a contract for LLMs to consult the *why* before changing the *what*.
 
 ---
 
@@ -31,104 +28,36 @@ Stargate addresses **intent loss**, not code quality.
 
 ---
 
-## What Stargate is (and is not)
+## What Stargate is
 
-### Stargate is:
-- A folder structure + ruleset
-- A causal index (`index.yaml`) describing code intent
-- A discipline enforced through tooling
-- A way to constrain LLM behavior
+### 1. A Sovereign Runtime Layer
+A safety-first interposition layer (**The Bridge**) that provides execution continuity and failure visibility. It ensures the environment stays alive even during project crashes.
 
-### Stargate is NOT:
-- A framework
-- An API
-- A runtime engine
-- A refactoring tool
-- A guarantee against bugs
-- A “scale infinitely” solution
-- **A system where an editable index is the primary source of truth**
+### 2. A Causal Index
+A mapping of intent over code (`index.yaml`), establishing a contract for LLMs to consult the **why** before changing the **what**.
 
 ---
 
-## Core idea
+## 🧬 Quick Integration
 
-Every meaningful piece of code should answer three questions:
+1. **Install**: Copy the `stargate/` folder to your project root.
+2. **Launch**: Launch your project using the **Sovereign Bridge** pattern.
+3. **Map**: Ask your LLM to map your intent into `stargate/index.yaml`.
 
-1. What does it do?
-2. Why does it exist?
-3. What depends on it?
-
-Stargate stores those answers in a **causal index** and requires the LLM to consult that index before acting.
-
-If the intent is unclear, the LLM must stop.
+> [!TIP]
+> For the detailed **Sovereign Bridge** integration ritual and technical diagrams, see [TECHNICAL_DETAILS.md](stargate/docs/TECHNICAL_DETAILS.md).
 
 ---
 
-## How it works (high level)
+## Why Stargate?
 
-1. The LLM analyzes the existing codebase
-2. It maps files and responsibilities into `stargate/index.yaml`
-3. Each entry represents a **causal node** (an intent)
-4. Future changes must:
-   - Reference an existing node, or
-   - Explicitly introduce a new one
-
-Code is not modified unless its intent is accounted for.
+Traditional LLM assistance often lacks context. Stargate addresses **intent loss** by:
+- Explicitly mapping code to human motivation.
+- Providing a visual fail-safe for runtime debugging.
+- Reducing the risk of "Gray Screen" failures in engines like DragonRuby.
 
 ---
 
-## Installation (DragonRuby example)
-
-Copy the following into your project directory:
-
-```text
-mygame/
-├── app/
-├── stargate/
-├── .cursorrules
-└── samples/ (optional)
-```
-
-Activate Stargate in `app/main.rb`:
-
-```ruby
-# At the top of the file, outside tick
-require "stargate/bootstrap.rb"
-
-# Establish sovereignty before first tick
-Stargate.initialize_context(nil)
-
-def tick(args)
-  # Heartbeat on each frame
-  Stargate.initialize_context(args, heartbeat: true)
-
-  # Game logic continues normally
-end
-```
-
-**Important:**
-- This does not change game behavior
-- It initializes context for LLM interaction
-- It does not run AI code at runtime
-
----
-
-## Using Stargate with an LLM
-
-The first interaction is mapping only.
-
-**Example prompt:**
-```text
-Read .cursorrules.
-Analyze app/main.rb.
-Create a causal map in stargate/index.yaml.
-Do not modify source files.
-This is an observation phase only.
-```
-
-You can also use `run` or `dragonruby-run` to launch DragonRuby.
-
-After this, any change must be justified through the causal index.
 
 ---
 
@@ -170,12 +99,10 @@ These are known trade-offs.
 ## Documentation
 
 - **Philosophy**: [DESIGN.md](stargate/docs/DESIGN.md)
-- **Constitution**: [`stargate/docs/CAUSAL_INDEX_LAWS.md`](stargate/docs/CAUSAL_INDEX_LAWS.md)
-- **API Contract**: [`stargate/docs/PUBLIC_CONTRACT.md`](stargate/docs/PUBLIC_CONTRACT.md)
-- **Index Schema**: [`stargate/docs/INDEX_SCHEMA.md`](stargate/docs/INDEX_SCHEMA.md)
-- Technical details: [`stargate/docs/TECHNICAL_DETAILS.md`](stargate/docs/TECHNICAL_DETAILS.md)
-- Causal editing model: [`stargate/docs/architecture/CAUSAL_EDITING_MODEL.md`](stargate/docs/architecture/CAUSAL_EDITING_MODEL.md)
-- Reset tool: `stargate/bin/stargate-reset`
+- **The Laws**: [SOVEREIGN_LAWS.md](stargate/docs/SOVEREIGN_LAWS.md) (The Core Specs)
+- **Causal Model**: [CAUSAL_INDEX_LAWS.md](stargate/docs/CAUSAL_INDEX_LAWS.md)
+- **Integration Guide**: [TECHNICAL_DETAILS.md](stargate/docs/TECHNICAL_DETAILS.md)
+- **Public API**: [PUBLIC_CONTRACT.md](stargate/docs/PUBLIC_CONTRACT.md)
 
 ---
 

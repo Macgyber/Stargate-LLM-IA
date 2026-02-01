@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+
+# Paths
+SDK_ROOT = File.expand_path('../..', __dir__)
+PROJECT_ROOT = File.expand_path('../../../..', SDK_ROOT) # Adjust to your structure
+APP_MAIN = File.join(SDK_ROOT, '../../app/main.rb')
+CHAOS_SAMPLE = File.join(SDK_ROOT, 'samples/chaos_lab.rb')
+DR_BINARY = File.join(SDK_ROOT, '../../../dragonruby')
+
+puts "🌌 Stargate: Initiating automated Chaos Lab session..."
+
+# 1. Backup existing app/main.rb
+if File.exist?(APP_MAIN)
+  backup_path = APP_MAIN + ".backup_#{Time.now.to_i}"
+  FileUtils.cp(APP_MAIN, backup_path)
+  puts "   📦 Existing app/main.rb backed up to #{File.basename(backup_path)}"
+end
+
+# 2. Inject Chaos Lab
+if File.exist?(CHAOS_SAMPLE)
+  FileUtils.cp(CHAOS_SAMPLE, APP_MAIN)
+  puts "   🧪 Chaos Lab injected into app/main.rb"
+else
+  puts "   ❌ Error: samples/chaos_lab.rb not found at #{CHAOS_SAMPLE}"
+  exit 1
+end
+
+# 3. Launch DragonRuby
+if File.exist?(DR_BINARY)
+  puts "   🚀 Launching DragonRuby..."
+  # Run from the project root (where the app/ folder is)
+  Dir.chdir(File.dirname(File.dirname(APP_MAIN))) do
+    exec(DR_BINARY)
+  end
+else
+  puts "   ⚠️  Could not find dragonruby binary at #{DR_BINARY}"
+  puts "   Please run it manually: dragonruby"
+end

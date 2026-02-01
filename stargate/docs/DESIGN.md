@@ -100,16 +100,14 @@ This prevents the common failure mode where an LLM fixes a local issue but break
 
 ---
 
-## 6. Why This Is Not a Framework
+## 6. Why This Is A Sovereign SDK
 
 A framework dictates *structure* (MVC, Entity-Component-System).
-Stargate dictates *process*.
+Stargate dictates **Process** and **Stability**.
 
 - You can use Stargate with Rails, DragonRuby, Node.js, or plain C scripts.
-- It does not import libraries into your runtime (other than a minimal core for validation if desired).
-- It does not force you to write classes or functions in a specific way.
-
-It only captures **metadata about** those classes and functions.
+- **Sovereign Runtime**: Unlike a pure documentation tool, Stargate provides a high-stability interposition layer (The Bridge) that ensures the host engine keeps breathing even during logic failures.
+- It does not force you to write classes or functions in a specific way; it merely wraps them in a protective, observable shell.
 
 ---
 

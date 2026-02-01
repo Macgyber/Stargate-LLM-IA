@@ -3,6 +3,9 @@
 The **Causal Index** (`stargate/index.yaml`) is the constitutional document of the project.
 These laws govern its creation, maintenance, and interpretation.
 
+> [!IMPORTANT]
+> **Separation of Concerns**: These are *Logical Laws* for mapping. For the *Physical Laws* of the runtime (Bridge/Avatar), see [SOVEREIGN_LAWS.md](SOVEREIGN_LAWS.md).
+
 ---
 
 ## Law 0: Scope

@@ -75,15 +75,15 @@ module Stargate
       when :observe
         Stargate.intent(:trace, { message: "👁️ Stargate-Immunology (WARN): #{evidence[0..100]}..." }, source: :system)
       when :recall
-        Stargate.intent(:alert, { message: "💊 Stargate-Immunology (RECALL): Auto-Correction triggered." }, source: :system)
+        Stargate.intent(:alert, { message: "💊 Stargate-Immunology (RECALL): Auto-Correction requested." }, source: :system)
         trigger_recall!
       when :freeze_and_recall
-        Stargate.intent(:alert, { message: "🛑 Stargate-Immunology (CRITICAL): Freezing universe for analysis." }, source: :system)
-        Stargate::Clock.pause! rescue nil
+        Stargate.intent(:alert, { message: "🛑 Stargate-Immunology (CRITICAL): Analysis requested. World stasis proposed." }, source: :system)
+        $stargate_stasis_requested = true
         trigger_recall!
       when :absolute_stasis
         Stargate.intent(:alert, { message: "⚠️ STARGATE PARADOX: Absolute stasis forced. Agent intervention required." }, source: :system)
-        Stargate::Clock.pause! rescue nil
+        $stargate_stasis_requested = true
       end
     end
 
@@ -93,8 +93,8 @@ module Stargate
         Stargate.intent(:trace, { message: "✨ Stargate-Immunology: Reverting to last known valid capsule (T=#{lvc[:tick]})." }, source: :system)
         Stargate::TimeTravel.recall_moment(lvc)
       else
-        Stargate.intent(:alert, { message: "❌ FAILED: No valid capsule found. Universal stasis engaged." }, source: :system)
-        Stargate::Clock.pause! rescue nil
+        Stargate.intent(:alert, { message: "❌ FAILED: No valid capsule found." }, source: :system)
+        $stargate_stasis_requested = true
       end
     end
 

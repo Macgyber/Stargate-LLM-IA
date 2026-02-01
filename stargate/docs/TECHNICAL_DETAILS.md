@@ -16,63 +16,49 @@ This document contains the detailed technical specifications, integration steps,
 
 ---
 
-## 📊 Causal Flow Diagram
+## 📊 Causal Flow Diagram (Sovereign)
 
 ```text
-    [GAMEPLAY]       [EDITOR / AI]       [DRAGONRUBY ENGINE]
-        |                |                       |
-   Stargate.intent   Injection.eval         Asset Reloads
-        |                |                       |
-        v                v                       v
+    [GAMEPLAY]       [BRIDGE (main.rb)]     [AVATAR]
+        |                  |                   |
+    Stargate.intent   Avatar.render <------- Pulse / Fail-safe
+        |                  |                   |
+        v                  v                   |
     +-----------------------------------------------------+
-    |                 STATE.MARK_DIRTY(:type)             |
+    |           SOVEREIGN BRIDGE (Main Loop)              |
     +-----------------------------------------------------+
-                             |
-                   +---------v----------+
-                   |  CLOCK (with_frame)|
-                   +---------+----------+
-                             |
-                 +-----------v-----------+
-                 |  Is Dirty or Heart?   |
-                 +-----------+-----------+
-                    |                 |
-            [YES] --+                 +-- [NO]
-              |                          |
-      +-------v-------+            +-----v-----+
-      | STATE.CAPTURE |            |  SILENCE  |
-      +-------+-------+            +-----------+
-              |
-      +-------v-------+ 
-      | PROTOCOL.emit |
-      +-------+-------+
-              |
-      +-------v-------+
-      | VIEW.handle   |
-      +-------+-------+
-              |
-      +-------v-------+
-      |  [STARGATE]   | 
-      | VIEW / MOMENT |
-      +---------------+
+        |                  |                   |
+        |           Check Status / Stasis?     |
+        |                  |                   |
+        +--------+---------+---------+---------+
+                 |                   |
+           [OK]--+           [CRASH / STASIS]--+
+                 |                   |         |
+         +-------v-------+   +-------v-------+ |
+         | CLOCK.tick    |   | AVATAR RENDERS| |
+         |   (Game)      |   |   STASIS HUD  | |
+         +-------+-------+   +---------------+ |
+                 |                             |
+         +-------v-------+            +--------v--------+
+         | STATE.CAPTURE |            | FAIL-SAFE VISUAL|
+         +---------------+            +-----------------+
 ```
 
 ---
-## 🔍 What Stargate Actually Does (The Reality Check)
 
-It's easy to get lost in the philosophy. Here is exactly **what our module does** and **what it does not do**.
+## 🔍 What Stargate Actually Does (Sovereign Edition)
 
 ### ✅ WHAT IT DOES (The Capabilities)
-### ✅ WHAT IT DOES (The Capabilities)
-1.  **Causalidad Discreta (Sovereign Silence)**: Sustituye la observación continua por un modelo basado en eventos. Solo captura el estado cuando ocurre una mutación real (Intent, Injection o Emergent), restaurando el rendimiento a 60 FPS.
-2.  **Gestión de Tiempo Determinista**: Utiliza un Heartbeat de respiración cada 60 ticks para validar integridad sin saturar el sistema ni la consola.
-3.  **Inmunología Selectiva**: Intercepta logs del motor, pero ignora el spam repetitivo mediante firmas únicas con TTL (Time-To-Live). Si un asset falta, lo reporta una vez y guarda silencio.
-4.  **Segregación de Canales (Protocol)**: Separa formalmente la telemetría técnica (`[STARGATE_MOMENT]`) de la narrativa humana (`[STARGATE_VIEW]`).
-5.  **Binds Code to Intent**: Via the Causal Graph, it physically links blocks of code to their YAML definitions. If you delete the YAML node, Stargate functionality allows you to auto-prune the dead code.
+1.  **Sovereign Bridge**: Prevents "Gray Screen" by guaranteeing a visual call (`Avatar`) before logic.
+2.  **Continuity over Stability**: If your code crashes, Stargate catches the error and keeps the engine running in "Fail-Safe Mode".
+3.  **Passive Vigilante**: Senses mutations and logic leaks without stopping the engine loop or writing to disk during tick.
+4.  **Forensic Ledger**: Audits the codebase offline to detect missing intentions or "ghost code" without affecting 60FPS performance.
+5.  **Causal Memory**: Only captures state when an `Intent` or `Injection` occurs, keeping the system lightweight.
 
 ### ❌ WHAT IT DOES NOT DO (The Boundaries)
 1.  **NO es un Engine**: Vive dentro de DragonRuby. Stargate maneja el flujo lógico, DR el resto.
-2.  **NO escribe código mágicamente**: La AI propone; Stargate valida y mapea.
-3.  **NO es ruidoso**: El silencio es su estado deseable ("Philosophy of Stasis").
+2.  **NO es un Autopilot**: El humano define la intención; Stargate protege la ejecución de esa intención.
+3.  **NO es ruidoso**: El silencio es salud. Si todo va bien, Stargate es invisible.
 
 ---
 
@@ -115,6 +101,7 @@ From now on, you are the pilot of a Causal System.
 Do not write code without an intent in the map. 
 Are you ready?"
 ```
+
 ### ▶️ Running the Game
 Launch the DragonRuby runtime with Stargate enabled using:
 ```bash
@@ -128,8 +115,8 @@ run
 1.  **Consult** `stargate/index.yaml` to understand the Map.
 2.  **Refer** to any `samples/` directory found in the project (usually included with your DragonRuby copy). These are the **Sovereign Examples**. The AI must mirror their style and structure to prevent hallucinations.
 3.  **Identify** the single specific Causal Node responsible for the intent.
-3.  **Operate** strictly within that node’s declared line ranges.
-4.  **Legitimacy**: Every edit must serve the Node's declared intention. Orphaned code is prohibited.
+4.  **Operate** strictly within that node’s declared line ranges.
+5.  **Legitimacy**: Every edit must serve the Node's declared intention. Orphaned code is prohibited.
 
 **Analogy:** 📚 **You’re editing a book where each chapter has a contract.** You don’t rewrite the whole story to fix one paragraph.
 
@@ -149,35 +136,39 @@ my-project/
 └── mygame.exe
 ```
 
-### Step 2: Activation (Main Loop)
-Open your `app/main.rb`. At the very top, inject the Stargate:
+### Step 2: The Sovereign Bridge (main.rb)
+Replace your standard `tick` with the **Sovereign Bridge**. This is the single most important stability requirement:
 
 ```ruby
-def tick(args)
-  require "stargate/bootstrap.rb" # 👈 Add this
-  Stargate.initialize_context(args)   # 👈 And this
+require "stargate/bootstrap.rb"
+
+def tick args
+  # LEY 1.1: Render First (Avatar)
+  Stargate::Avatar.render(args, fail_safe: $stargate_fail_safe)
   
-  # Your game logic lives here...
+  begin
+    # LEY 5: Initial Boot
+    unless Stargate.status[:booted]
+      Stargate.initialize_context(args)
+    end
+
+    # LEY 5.1: Bridge Flow Control
+    if $stargate_stasis_requested && !Stargate::Clock.paused?
+      Stargate::Clock.pause!
+    end
+
+    # Your actual game logic
+    run_game_tick(args)
+  rescue => e
+    # LEY 10.1: Fail-Safe Visual
+    $stargate_fail_safe = e
+  end
 end
 ```
 
 ### Step 3: Protection (AI Rules)
 Move the file `stargate/.cursorrules` to your project's root directory.
 *   *Reality:* You are teaching the AI the laws of this world.
-
----
-
-## 🔄 THE TWIN LAW (⚠️ CRITICAL)
-
-**`app/main.rb` and `stargate/index.yaml` are CONJOINED TWINS.**
-YAML is now stored at `stargate/index.yaml`.
-They share a single life force. One cannot exist without the other.
-
-**Analogy:** 🧠 **Brain and Memory.** You can’t change one without the other.
-
-*   **Rule 1**: You CANNOT edit `main.rb` without updating `index.yaml`.
-*   **Rule 2**: You CANNOT update `index.yaml` without editing `main.rb`.
-*   **Consequence**: Discrepancy between Code (Reality) and Graph (Intent) is a FATAL ERROR. The flow will break.
 
 ---
 

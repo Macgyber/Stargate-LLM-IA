@@ -1,41 +1,15 @@
+# === Stargate-LLM-IA Gitignore ===
 
-# DragonRuby Engine Binaries
-SDK-DR
+# Dependencies & Sub-modules
+# (Removed /stargate/ to allow SDK source tracking)
 
-# Temporary & runtime files
+# Editor & OS
+.DS_Store
+*.swp
+*~
+
+# Internal State (Not for version control)
+.causal/
+.stargate_status
+log/
 tmp/
-logs/
-.dragonruby/
-*.log
-
-# Windows Artifacts
-Thumbs.db
-verify_integrity.bat
-verify_integrity.sh
-Desktop.ini
-
-# Mac Artifacts
-.DS_Store
-
-# User-specific
-.env
-=======
-# Local environment variables
-.env
-.env.*
-!.env.example
-run.bat
-# OS files
-.DS_Store
-Thumbs.db
-.fuente_verdad
-# Logs
-*.log
-logs/
-
-
-# Project specific
-.stargate_lock
-.agent
-developer
-# Internal Tooling & Data

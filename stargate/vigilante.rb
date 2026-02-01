@@ -3,14 +3,10 @@ module Stargate
   # v2.1 - Unsanctioned Mutation Detection
   # Erradicar, no esconder.
   module Vigilante
-    @interrupted = false
-    @active      = false
-    @violation   = nil
     @debt_file   = ".stargate/causal_debt.json"
-    @source_fingerprints = {}
     
     def self.violation
-      @violation
+      $stargate_violation
     end
 
     def self.interrupted
@@ -27,13 +23,11 @@ module Stargate
       
       # 1. Sesión Soberana: Anclar la realidad una sola vez.
       if $stargate_source_anchor
-        @source_fingerprints = $stargate_source_anchor
         # DISPARADOR: Si estamos re-instalando (hot-reload), validamos inmediatamente
         validate_contract(args, reason: :structural_reload)
       else
         fingerprint_sources(args)
-        $stargate_source_anchor = @source_fingerprints
-        # Stargate.intent(:trace, { message: "🛡️ Vigilante: Session Anchor established." }, source: :system)
+        # $stargate_source_anchor is already set in fingerprint_sources
       end
       
       # 4. Memoria de fallos: Check for unresolved debts on boot
@@ -53,56 +47,53 @@ module Stargate
       check_system_health(args)
     end
 
-    # 🚨 SHOUT: The world stops here.
-    def self.shout!(type, message)
-      return if interrupted
-      
+    # 🚨 SHOUT: Sensor event emission (Passive)
+    def self.shout!(args, type, message)
+      # LEY 5.1: Vigilante never controls flow. It requests intention.
       $stargate_vigilante_interrupted = true
-      @violation = { 
+      $stargate_violation = { 
         type: type, 
         message: message, 
-        tick: ($gtk.args.state.tick_count rescue 0),
+        tick: (args.state.tick_count rescue 0),
         recorded_at: Time.now.to_f
       }
       
-      record_debt(@violation)
-      puts "[VIGILANTE_INTERRUPT] TYPE: #{type} | MSG: #{message}"
+      # We no longer write to disk here. We emit a technical intent.
+      # The Bridge or a dedicated Archivist will handle persistence.
+      puts "🛡️ [VIGILANTE_SIGHT] #{type.to_s.upcase}: #{message}"
       
       Stargate.intent(:alert, { 
-        message: "🛑 VIGILANTE INTERRUPT: #{message}",
-        debt: @violation,
-        hint: "The organism has detected an unauthorized change in its own structure."
+        type: type,
+        message: "🛑 VIGILANTE: #{message}",
+        debt: @violation
       }, source: :system)
 
-      Stargate::Clock.pause! rescue nil
+      # Request stasis but don't enforce it.
+      $stargate_stasis_requested = true
     end
 
     # 🔓 RECOVERY
     def self.resolve!(args)
       $stargate_vigilante_interrupted = false
+      $stargate_stasis_requested = false
       @violation = nil
       # Update fingerprints to accept the mutation as the new reality
       fingerprint_sources(args)
-      $stargate_source_anchor = @source_fingerprints # Sello de nueva realidad
-      $gtk.delete_file(@debt_file) rescue nil
-      Stargate.intent(:trace, { message: "🛡️ Vigilante: Debt paid. New reality anchored." }, source: :system)
+      $stargate_source_anchor = @source_fingerprints
+      Stargate.intent(:trace, { message: "🛡️ Vigilante: Reality recalibrated." }, source: :system)
     end
 
     private
 
     def self.fingerprint_sources(args)
-      # We only monitor files declared in our index (The Constitution)
-      # For now, we anchor app/main.rb as the primary organ.
+      # LEY 3: Absolute authority in args
+      $stargate_source_anchor = {}
       files = ["app/main.rb"]
       files.each do |f|
-        stat = $gtk.stat_file(f)
+        stat = args.gtk.stat_file(f)
         if stat
-          # Handle both Hash and Array return types from DragonRuby stat_file
           modtime = stat.is_a?(Hash) ? stat[:modtime] : stat[0]
-          @source_fingerprints[f] = modtime
-          # puts "[VIGILANTE_SIGHT] Anchored fingerprint for #{f} at #{modtime}"
-        else
-          # puts "[VIGILANTE_SIGHT] WARNING: Could not anchor #{f}"
+          $stargate_source_anchor[f] = modtime
         end
       end
     end
@@ -110,22 +101,18 @@ module Stargate
     def self.validate_contract(args, reason: :heartbeat)
       return unless $stargate_source_anchor.is_a?(Hash)
       
-      # 10. Gemini Protocol: Audit the Ledger
-      Stargate::LedgerKeeper.audit!
-
       $stargate_source_anchor.each do |file, last_time|
         next unless last_time
-        info = $gtk.stat_file(file)
+        info = args.gtk.stat_file(file)
         next unless info
         
-        # Handle both Hash and Array return types from DragonRuby stat_file
         current_time = info.is_a?(Hash) ? info[:modtime] : info[0]
         next unless current_time
         
         if current_time.to_i > last_time.to_i
           unless Stargate::State.dirty_types.include?(:reloading) || Stargate::State.dirty_types.include?(:logic)
              msg = reason == :structural_reload ? "Unsanctioned Structural Mutation" : "Design Leak"
-             shout!(:unsanctioned_mutation, "#{msg}: Unauthorized modification detected in #{file}")
+             shout!(args, :unsanctioned_mutation, "#{msg} in #{file}")
           end
         end
       end
@@ -153,9 +140,7 @@ module Stargate
     end
 
     def self.enforce_stasis(args)
-      if args.state.tick_count % 60 == 0
-        puts "  [STASIS] Waiting for Causal Debt resolution: #{@violation[:message]}"
-      end
+      # Silenciamos el log spam durante las pruebas de caos
       Stargate::Clock.pause! rescue nil
     end
 

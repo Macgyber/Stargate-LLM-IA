@@ -4,31 +4,31 @@ module Stargate
     APP_ROOT    = "app"
 
     # =========================
-    # ENTRY POINT
+    # ENTRY POINT (Manual/Offline Only)
     # =========================
-    def self.audit!
+    def self.audit!(args)
+      # LEY 3 & 6: Authority via args. No auto-run.
       now = Time.now.to_i
+      observed = scan_app_for_nodes(args)
+      ledger   = load_ledger(args, now)
 
-      observed = scan_app_for_nodes
-      ledger   = load_ledger(now)
-
-      grace = (ledger["metadata"]["grace_period"] || 2).to_i
+      report = { status: :ok, violations: [], birthed: [], migrated: [], ghosted: [] }
+      changed = false
 
       # -------------------------
-      # BIRTHS & MIGRATIONS
+      # OBSERVE REALITY
       # -------------------------
       observed.each do |id, file|
         if ledger["nodes_by_id"][id]
           node = ledger["nodes_by_id"][id]
-
           node["last_seen"] = now
           node["missing_count"] = 0
-
           if node["current_file"] != file
             node["current_file"] = file
+            report[:migrated] << id
+            changed = true
           end
         else
-          # New birth -> pending
           new_node = {
             "id" => id,
             "current_file" => file,
@@ -37,53 +37,53 @@ module Stargate
             "missing_count" => 0,
             "status" => "pending"
           }
-
           ledger["nodes"] << new_node
           ledger["nodes_by_id"][id] = new_node
+          report[:birthed] << id
+          changed = true
         end
       end
 
       # -------------------------
-      # ABSENCES & AMPUTATIONS
+      # DETECT ABSENCES
       # -------------------------
       ledger["nodes"].each do |node|
         unless observed[node["id"]]
           node["missing_count"] ||= 0
           node["missing_count"] += 1
-
-          if node["missing_count"] >= grace
-            node["status"] = "ghost"
+          if node["missing_count"] == 1
+            report[:ghosted] << node["id"]
+            report[:violations] << "Node #{node['id']} vanished from its original vessel."
+            report[:status] = :violations
+            changed = true
           end
         end
       end
 
       # -------------------------
-      # PERSIST MEMORY
+      # PERSIST ONLY IF CHANGED
       # -------------------------
-      ledger["metadata"]["last_audit"] = now
-      save_ledger(ledger)
+      if changed
+        ledger["metadata"]["last_audit"] = now
+        save_ledger(args, ledger)
+        puts "📖 [LEDGER] Forensics complete. Changes persisted."
+      end
 
-      # -------------------------
-      # ENFORCEMENT
-      # -------------------------
-      enforce_stasis!(ledger)
+      report
     end
 
     # =========================
-    # SCAN FILESYSTEM
+    # SCAN FILESYSTEM (Offline/Throttled)
     # =========================
-    def self.scan_app_for_nodes
+    def self.scan_app_for_nodes(args)
       nodes = {}
-
-      files = list_rb_files(APP_ROOT)
+      files = list_rb_files(args, APP_ROOT)
       files.each do |file|
-        content = $gtk.read_file(file)
+        content = args.gtk.read_file(file)
         next unless content
 
         content.split("\n").each do |line|
           next unless line.include?("@node:")
-
-          # Extraction logic (mruby-safe)
           parts = line.split("@node:")
           id_part = parts.last
           if id_part
@@ -92,22 +92,25 @@ module Stargate
           end
         end
       end
-
       nodes
     end
 
-    def self.list_rb_files(dir)
+    def self.list_rb_files(args, dir, depth = 0)
+      return [] if depth > 5 # LEY 2: Recursion Guard
       result = []
-      $gtk.list_files(dir).each do |path|
-        # DragonRuby list_files returns relative paths to the directory passed
+      files = args.gtk.list_files(dir)
+      return [] unless files
+
+      files.each do |path|
+        next if path.start_with?(".") 
+        
         full_path = "#{dir}/#{path}"
         if path.end_with?(".rb")
           result << full_path
-        elsif !path.include?(".") # Simple directory check (DragonRuby specific)
-          # We check if it's a directory by listing it
-          children = $gtk.list_files(full_path)
+        elsif !path.include?(".")
+          children = args.gtk.list_files(full_path)
           if children && children.any?
-             result += list_rb_files(full_path)
+             result += list_rb_files(args, full_path, depth + 1)
           end
         end
       end

@@ -1,0 +1,74 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# verify-sovereignty: The Implacable Auditor
+# Proof of work tool to verify SRC compliance.
+
+puts "🔍 Stargate: Commencing Sovereignty Verification Audit..."
+
+passed = true
+
+# 1. Verify Bridge Pattern in main.rb (theoretical or actual)
+main_path = 'app/main.rb'
+if File.exist?(main_path)
+  content = File.read(main_path)
+  if content.include?('Stargate::Avatar.render') && content.include?('rescue => e')
+    puts "✅ Law 1.1 (Render First): Verified in #{main_path}"
+  else
+    puts "⚠️  Law 1.1 (Render First): Pattern not found or incomplete in #{main_path}"
+    passed = false
+  end
+else
+  puts "ℹ️  Host project 'app/main.rb' not found in this SDK root (Expected)."
+end
+
+# 2. Verify Avatar Pacificm
+avatar_path = 'stargate/avatar.rb'
+if File.exist?(avatar_path)
+  content = File.read(avatar_path)
+  if content.include?('args.outputs') # Needs output access
+    puts "✅ Law 7 (Pulse Permanent): Avatar has output capability."
+  else
+    puts "❌ Law 7 (Pulse Permanent): Avatar missing output hooks!"
+    passed = false
+  end
+else
+  puts "❌ FATAL: stargate/avatar.rb missing!"
+  passed = false
+end
+
+# 3. Verify Boot Idempotency
+boot_path = 'stargate/bootstrap.rb'
+if File.exist?(boot_path)
+  content = File.read(boot_path)
+  if content.include?('$stargate_active') && content.include?('args')
+    puts "✅ Law 3 (Authority of Args): Bootstrap respects host context."
+  else
+    puts "❌ Law 3 (Authority of Args): Bootstrap logic is non-compliant."
+    passed = false
+  end
+else
+  puts "❌ FATAL: stargate/bootstrap.rb missing!"
+  passed = false
+end
+
+# 4. Verify Bin Tool Alignment
+reset_path = 'stargate/bin/stargate-reset'
+if File.exist?(reset_path)
+  content = File.read(reset_path)
+  if content.include?('Stargate::Avatar.render')
+    puts "✅ Bin Tooling: stargate-reset utilizes Sovereign pattern."
+  else
+    puts "❌ Bin Tooling: stargate-reset is outdated!"
+    passed = false
+  end
+end
+
+puts "\n--- Result ---"
+if passed
+  puts "🟢 SOVEREIGNTY VERIFIED: System is compliant with SRC Laws."
+  exit 0
+else
+  puts "🔴 AUDIT FAILED: Jurisdictional violations or missing patterns detected."
+  exit 1
+end

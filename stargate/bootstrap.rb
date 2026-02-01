@@ -1,3 +1,18 @@
+# Internals are loaded immediately to support Sovereign Bridge availability
+require "stargate/random.rb"
+require "stargate/state.rb"
+require "stargate/view.rb"
+require "stargate/protocol.rb"
+require "stargate/injection.rb"
+require "stargate/clock.rb"
+require "stargate/stability.rb"
+require "stargate/time_travel.rb"
+require "stargate/immunology.rb"
+require "stargate/vigilante.rb"
+require "stargate/diagnose.rb" 
+require "stargate/avatar.rb"
+require "stargate/ledger_keeper.rb"
+require "stargate/kernel.rb"
 
 # Stargate Core: The Sovereign API
 # This is the single entry point for the Catalyst Runtime.
@@ -11,7 +26,7 @@ module Stargate
       # Si el script se re-ejecuta (toplevel call) mientras ya estamos activos, detectamos mutación.
       if $stargate_active && args && !heartbeat
          unless Vigilante.interrupted || $stargate_sanctioned_reset
-            Vigilante.shout!(:unsanctioned_mutation, "Structural Mutation Detected: Script re-executed without Causal Intent.")
+            Vigilante.shout!(args, :unsanctioned_mutation, "Structural Mutation Detected: Script re-executed without Causal Intent.")
          end
          
          # Limpiamos el flag de reset sancionado una vez usado
@@ -26,21 +41,6 @@ module Stargate
       @bootstrapping = true
       @event_buffer  = []
       @mode          = mode
-
-      # Internals are loaded in order of dependency
-      require "stargate/random.rb"
-      require "stargate/state.rb"
-      require "stargate/view.rb"
-      require "stargate/protocol.rb"
-      require "stargate/injection.rb"
-      require "stargate/clock.rb"
-      require "stargate/stability.rb"
-      require "stargate/time_travel.rb"
-      require "stargate/immunology.rb"
-      require "stargate/vigilante.rb"
-      require "stargate/diagnose.rb" 
-      require "stargate/ledger_keeper.rb"
-      require "stargate/kernel.rb"
 
       # Initialize subsystems
       bootstrap(args)
@@ -88,12 +88,14 @@ module Stargate
     end
 
     # 🔍 PUBLIC API: Status (read-only, for editors/AI)
+    # LEY 3: Unified Status Authority
     def self.status
       {
-        active: @active,
-        mode: @mode,
-        tick: (@args.state.tick_count rescue 0),
-        paused: (Stargate::Clock.paused? rescue false)
+        active: $stargate_active || false,
+        interrupted: Vigilante.interrupted,
+        booted: $stargate_booted || false,
+        stasis_requested: $stargate_stasis_requested || false,
+        fail_safe: $stargate_fail_safe != nil
       }
     end
 
