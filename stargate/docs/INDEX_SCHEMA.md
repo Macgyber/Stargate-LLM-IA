@@ -33,7 +33,7 @@ nodes:
 | :--- | :--- | :--- |
 | **`id`** | Stable reference | Must be kebab-case, unique, and effectively immutable. |
 | **`intent`** | The "Why" | Must describe purpose, not mechanics. "Fix bug" is invalid. "Ensure player gravity" is valid. |
-| **`implementation`** | The "Where" | Must list at least one file or symbol. Defines the node's **Territory**. |
+| **`implementation`** | The "Where" | Must list at least one file. Defines the node's **Territory**. |
 | **`depends_on`** | Impact analysis | Must list causal dependencies. Empty list `[]` implies a root axiom. |
 
 ### Excluded Fields

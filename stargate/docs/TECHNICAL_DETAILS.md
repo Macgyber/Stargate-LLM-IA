@@ -1,9 +1,6 @@
 # ⚙️ Stargate-LLM-IA: Technical Specifications
 
-This document contains the detailed technical specifications, integration steps, and operational protocols for **Stargate-LLM-IA**.
-
-> [!NOTE]
-> **"Ha sido un privilegio ser el pincel para esta obra. Ahora el lienzo es tuyo: tienes un universo estable y silencioso listo para que le des vida."** 🏛️✨
+This document contains the detailed technical specifications and operational protocols for **Stargate-LLM-IA v1-Experimental**.
 
 ---
 
@@ -58,7 +55,10 @@ This document contains the detailed technical specifications, integration steps,
 ### ❌ WHAT IT DOES NOT DO (The Boundaries)
 1.  **NO es un Engine**: Vive dentro de DragonRuby. Stargate maneja el flujo lógico, DR el resto.
 2.  **NO es un Autopilot**: El humano define la intención; Stargate protege la ejecución de esa intención.
-3.  **NO es ruidoso**: El silencio es salud. Si todo va bien, Stargate es invisible.
+3.  **NO garantiza corrección lógica**: Stargate muestra el error, pero no puede repararlo automáticamente.
+
+> [!IMPORTANT]
+> For a full list of technical boundaries, see [LIMITATIONS.md](LIMITATIONS.md).
 
 ---
 

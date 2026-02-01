@@ -1,116 +1,53 @@
-# Stargate-LLM-IA
+# Stargate-LLM-IA (v1-Experimental)
 
-**"The index is a derived map, not a governing authority."**  
-**"Authority in Stargate resides in the interposition layer, not in documentation artifacts."**
+**"A visibility layer for causal intent, not a replacement for human logic."**
 
-A causal indexing system for controlling how LLMs read and modify code.
+Stargate is a **Sovereign Causal SDK** for LLM-assisted development. It functions as a technical library that provides:
 
----
-
-Stargate is a **Sovereign Causal SDK** for LLM-assisted development.
-
-It functions as a technical library/runtime that provides:
-1.  **A Sovereign Runtime Layer**: A safety-first interposition layer (The Bridge) that provides **execution continuity and failure visibility**.
-2.  **A Causal Index**: A mapping of intent over code, establishing a contract for LLMs to consult the *why* before changing the *what*.
+1.  **Sovereign Visibility**: A safety-first interposition layer (The Bridge) that guarantees simulation continuity even during project crashes.
+2.  **Causal Indexing**: A derived mapping of intent over code, establishing a contract for LLMs to consult the *why* before changing the *what*.
 
 ---
 
-## What problem does it address?
+## 🏗️ Core Capabilities (Observed)
 
-When using LLMs (Cursor, Copilot, local models) on real projects:
+- **Execution Continuity**: Prevents the "Gray Screen" by ensuring a render call happens before the logic loop.
+- **Fail-Safe Diagnostics**: Catch-all interposition that displays errors while keeping the engine alive.
+- **Structural Memory**: A manual `LedgerKeeper` tool to detect node "births" and "ghosts" in the filesystem.
 
-- Context is implicit and fragile
-- The model modifies code without understanding why it exists
-- Changes fix one thing and silently break another
-- Developers lose trust in letting the LLM touch the code
+## ⚠️ Jurisdictional Boundaries
 
-Stargate addresses **intent loss**, not code quality.
+Stargate is a **visibility tool**, not a security sandbox or a bug-fixer.
 
----
+- **Non-Intervention**: It detects violations but does not automatically revert code.
+- **Manual Audits**: Structural checks are performed only when explicitly requested.
+- **Passive Nature**: If everything is technically correct, Stargate remains invisible.
 
-## What Stargate is
-
-### 1. A Sovereign Runtime Layer
-A safety-first interposition layer (**The Bridge**) that provides execution continuity and failure visibility. It ensures the environment stays alive even during project crashes.
-
-### 2. A Causal Index
-A mapping of intent over code (`index.yaml`), establishing a contract for LLMs to consult the **why** before changing the **what**.
+> [!CAUTION]
+> **READ BEFORE USING**: For a full list of technical boundaries and anti-guarantees, see [LIMITATIONS.md](stargate/docs/LIMITATIONS.md).
 
 ---
 
-## 🧬 Quick Integration
+## 🧬 Integration Ritual
 
 1. **Install**: Copy the `stargate/` folder to your project root.
-2. **Launch**: Launch your project using the **Sovereign Bridge** pattern.
-3. **Map**: Ask your LLM to map your intent into `stargate/index.yaml`.
-
-> [!TIP]
-> For the detailed **Sovereign Bridge** integration ritual and technical diagrams, see [TECHNICAL_DETAILS.md](stargate/docs/TECHNICAL_DETAILS.md).
+2. **Launch**: Replace your standard `tick` with the **Sovereign Bridge** pattern (see [TECHNICAL_DETAILS.md](stargate/docs/TECHNICAL_DETAILS.md)).
+3. **Map**: Use the provided `.cursorrules` to instruct your LLM to map existing intent into `stargate/index.yaml`.
 
 ---
 
-## Why Stargate?
+## Documentation Index
 
-Traditional LLM assistance often lacks context. Stargate addresses **intent loss** by:
-- Explicitly mapping code to human motivation.
-- Providing a visual fail-safe for runtime debugging.
-- Reducing the risk of "Gray Screen" failures in engines like DragonRuby.
-
----
-
-
----
-
-## Why not comments or documentation?
-
-Comments describe *what* code does.
-
-Stargate records:
-- **Why** the code exists
-- **What assumptions** it relies on
-- **What other parts** depend on it
-
-This matters when:
-- Letting an LLM modify unfamiliar code
-- Returning to a project after time
-- Evaluating the impact of a change
-
----
-
-## Limitations
-
-- Requires manual discipline
-- The causal index can drift if ignored
-- Best suited for small to medium projects
-- Current tooling assumes Cursor-style workflows
-
-These are known trade-offs.
-
----
-
-## Who is this for?
-
-- Developers experimenting with LLM-assisted coding
-- Projects where predictability matters more than speed
-- People who want to understand changes, not just apply them
-
----
-
-## Documentation
-
-- **Philosophy**: [DESIGN.md](stargate/docs/DESIGN.md)
-- **The Laws**: [SOVEREIGN_LAWS.md](stargate/docs/SOVEREIGN_LAWS.md) (The Core Specs)
-- **Causal Model**: [CAUSAL_INDEX_LAWS.md](stargate/docs/CAUSAL_INDEX_LAWS.md)
-- **Integration Guide**: [TECHNICAL_DETAILS.md](stargate/docs/TECHNICAL_DETAILS.md)
+- **Foundations**: [DESIGN.md](stargate/docs/DESIGN.md)
+- **The Laws**: [SOVEREIGN_LAWS.md](stargate/docs/SOVEREIGN_LAWS.md)
+- **Technical Specs**: [TECHNICAL_DETAILS.md](stargate/docs/TECHNICAL_DETAILS.md)
+- **Technical Limits**: [LIMITATIONS.md](stargate/docs/LIMITATIONS.md)
 - **Public API**: [PUBLIC_CONTRACT.md](stargate/docs/PUBLIC_CONTRACT.md)
 
 ---
 
 ## Status
 
-This project is **experimental**.
+**Experimental (v1)**. This architecture is a proof-of-concept for Sovereignty in Agentic Workflows. It is designed for observability and human-in-the-loop control.
 
-- The ideas are stable.
-- The implementation is evolving.
-
-Critical feedback is welcome.
+*Observe. Decide. Build.*
