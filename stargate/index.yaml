@@ -1,0 +1,87 @@
+# 🌌 STARGATE CAUSAL INDEX
+# Project: Stargate-HUB
+# Territory: Host Territory (app/)
+# -----------------------------------------------------------------------------
+# [WARNING] This is a Mapping Proposal. No markers have been added to source.
+
+nodes:
+  - id: system-boot-alignment
+    description: "Alignment of the system boot sequence."
+    territory: "app/main.rb"
+    status: "sanctioned"
+    intent: "Ensure Stargate is initialized before any host logic to provide causal protection."
+
+  - id: engine-entry
+    description: "Primary DragonRuby tick loop orchestration."
+    territory: "app/main.rb"
+    status: "sanctioned"
+    intent: "Manage game frame orchestration and global state initialization."
+
+  - id: sprite-registration
+    description: "Initial asset and sprite configuration (Frame 0)."
+    territory: "app/main.rb"
+    status: "proposed"
+    intent: "Ensure core visuals are registered for the Interpreter."
+
+  - id: window-configuration
+    description: "Global runtime window parameters."
+    territory: "app/main.rb"
+    status: "sanctioned"
+    intent: "Set window title and initial visual context using engine-compatible methods."
+
+  - id: ldtk-orchestration
+    description: "Bridge integration with StargateLDTK."
+    territory: "app/main.rb"
+    status: "proposed"
+    intent: "Delegate world pulse and rendering to the LDTK subsystem."
+
+  - id: game-logic-main
+    description: "Core gameplay mechanics (physics/input)."
+    territory: "app/main.rb"
+    status: "proposed"
+    intent: "Handle character movement, collisions, and state transitions."
+
+  - id: sacred-position-service
+    description: "Disk persistence for player coordinates (Causal Memory)."
+    territory: "app/main.rb"
+    status: "proposed"
+    intent: "Minimize I/O while ensuring high-fidelity position recovery."
+
+  - id: victory-condition
+    description: "End-game transition and cinematic UI."
+    territory: "app/main.rb"
+    status: "proposed"
+    intent: "Detect goal attainment and render high-fidelity victory state."
+
+  - id: environmental-interaction
+    description: "Proximity detection for interactive objects (Torches)."
+    territory: "app/main.rb"
+    status: "proposed"
+    intent: "Manage discovery and persistence of environmental triggers."
+
+  - id: visual-visibility-system
+    description: "Atmospheric darkness and dynamic lighting system."
+    territory: "app/visibility.rb"
+    status: "proposed"
+    intent: "Render the perception dome based on player and light source positions."
+
+  - id: ldtk-bridge-facade
+    description: "Architectural facade for LDtk world visualization."
+    territory: "app/stargate-ldtk/bridge.rb"
+    status: "sanctioned"
+    intent: "Provide a zero-friction entry point for world rendering and hot-reloading."
+
+  - id: world-reality-anchor
+    description: "The LDtk project file defining the game world."
+    territory: "app/worlds/world.ldtk"
+    status: "sanctioned"
+    intent: "Define the spatial and physical structure of the caverns."
+
+  - id: cavernas-atlas-node
+    description: "Primary tileset atlas for the underground world."
+    territory: "app/worlds/atlas/cavernas.png"
+    status: "sanctioned"
+    intent: "Provide visual texture and identity to the caverns."
+
+# -----------------------------------------------------------------------------
+# END OF MAPPING PROPOSAL

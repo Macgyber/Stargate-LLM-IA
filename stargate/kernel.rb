@@ -9,29 +9,33 @@ module Stargate
       $stargate_wrapped_frame = true
       # Law of Vigilance: The Guardian speaks before the world moves.
       Stargate::Vigilante.tick(args)
-      return if Stargate::Vigilante.interrupted
-
+      
       # Law of Grace: The game MUST survive Stargate.
+      # NOTA: Ya no retornamos si hay interrupción; permitimos el overlay del Vigilante.
       begin
         Stargate::Clock.tick(args) do
           Stargate::Stability.tick(args)
           begin
-            begin
+            # Solo llamamos al juego si no hay una interrupción crítica del Vigilante
+            unless Stargate::Vigilante.interrupted
               super(args) 
-            rescue StandardError => e
-              # INTERCEPTION: We caught a runtime error in the game loop.
-              Stargate::Vigilante.shout!(:runtime_error, "#{e.class}: #{e.message}")
-              Stargate.intent(:alert, { message: "🛡️ STARGATE INTERCEPTED: #{e.class}: #{e.message}" }, source: :game)
-            rescue NameError => e
-              Stargate::Vigilante.shout!(:logic_error, "Undefined name/method: #{e.message}")
             end
-          ensure
-            $stargate_wrapped_frame = false
+          rescue StandardError => e
+            # INTERCEPTION: We caught a runtime error in the game loop.
+            Stargate::Vigilante.shout!(args, :runtime_error, "#{e.class}: #{e.message}")
+            Stargate.intent(:alert, { message: "🛡️ STARGATE INTERCEPTED: #{e.class}: #{e.message}" }, source: :game)
+          rescue NameError => e
+            Stargate::Vigilante.shout!(args, :logic_error, "Undefined name/method: #{e.message}")
           end
         end
       rescue => e
         # If Stargate fails, we still need to breathe.
         Stargate.intent(:alert, { message: "STARGATE CRITICAL: #{e.message}" }, source: :system) rescue nil
+      ensure
+        # 3. VIGILANCIA POST-MORTEM: Validamos la salud visual y el overlay
+        Stargate::Vigilante.check_visual_health(args)
+        Stargate::Vigilante.enforce_stasis(args) if Stargate::Vigilante.interrupted
+        $stargate_wrapped_frame = false
       end
     end
   end

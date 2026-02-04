@@ -203,7 +203,7 @@ module Stargate
     # =========================
     # STASIS
     # =========================
-    def self.enforce_stasis!(ledger, notify: true)
+    def self.enforce_stasis!(args, ledger, notify: true)
       pending = []
       ghosts  = []
 

@@ -130,7 +130,7 @@ module Stargate
           }, source: :system)
           Stargate::Clock.pause!
         rescue
-          shout!(:integrity_error, "Debt Memory Corrupted. Total Stasis invoked.")
+          shout!(args, :integrity_error, "Debt Memory Corrupted. Total Stasis invoked.")
         end
       end
     end
@@ -140,8 +140,62 @@ module Stargate
     end
 
     def self.enforce_stasis(args)
-      # Silenciamos el log spam durante las pruebas de caos
+      # 1. RENDERING DE EMERGENCIA: Mostramos el error en pantalla
+      render_stargate_overlay(args)
+      
+      # 2. PAUSA CAUSAL: Silenciamos el log spam durante las pruebas de caos
       Stargate::Clock.pause! rescue nil
+    end
+
+    def self.check_visual_health(args)
+      # Ley de Visibilidad: Si no hay outputs, el sistema está en el "Abismo"
+      conteo = (args.outputs.sprites.size + 
+                args.outputs.solids.size + 
+                args.outputs.labels.size + 
+                args.outputs.lines.size + 
+                args.outputs.primitives.size)
+      
+      args.state.stargate_visual_health ||= { black_hole_frames: 0, status: :ok }
+      v_health = args.state.stargate_visual_health
+      
+      if conteo == 0
+        v_health.black_hole_frames += 1
+        if v_health.black_hole_frames > 15
+           v_health.status = :black_hole
+           unless @shouted_black_hole
+             puts "☢️  STARGATE: PANTALLA GRIS DETECTADA (Agujero Negro Visual)."
+             @shouted_black_hole = true
+           end
+        end
+      else
+        v_health.black_hole_frames = 0
+        v_health.status = :ok
+        @shouted_black_hole = false
+      end
+    end
+
+    def self.render_stargate_overlay(args)
+      return unless violation
+      
+      # Banner de Emergencia
+      args.outputs.primitives << { x: 0, y: 0, w: 1280, h: 720, r: 0, g: 0, b: 0, a: 150, primitive_marker: :solid }
+      args.outputs.primitives << { x: 0, y: 640, w: 1280, h: 80, r: 150, g: 30, b: 30, a: 230, primitive_marker: :solid }
+      
+      args.outputs.primitives << { 
+        x: 640, y: 700, text: "🛡️ STARGATE VIGILANTE: SYSTEM INTERRUPTED", 
+        size_enum: 5, alignment_enum: 1, r: 255, g: 255, b: 255, primitive_marker: :label 
+      }
+      
+      args.outputs.primitives << { 
+        x: 640, y: 665, text: "Violación: #{violation[:message]}", 
+        size_enum: 1, alignment_enum: 1, r: 255, g: 200, b: 200, primitive_marker: :label 
+      }
+
+      args.outputs.primitives << { 
+        x: 640, y: 360, text: "Llamar a 'Stargate.reset_world!' en la consola para recalibrar.", 
+        size_enum: 2, alignment_enum: 1, r: 255, g: 255, b: 255, a: (150 + Math.sin(Time.now.to_f * 5) * 105), 
+        primitive_marker: :label 
+      }
     end
 
     def self.check_system_health(args)

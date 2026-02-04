@@ -1,39 +1,48 @@
 # Internals are loaded immediately to support Sovereign Bridge availability
-require "stargate/random.rb"
-require "stargate/state.rb"
-require "stargate/view.rb"
-require "stargate/protocol.rb"
-require "stargate/injection.rb"
-require "stargate/clock.rb"
-require "stargate/stability.rb"
-require "stargate/time_travel.rb"
-require "stargate/immunology.rb"
-require "stargate/vigilante.rb"
-require "stargate/diagnose.rb" 
-require "stargate/avatar.rb"
-require "stargate/ledger_keeper.rb"
-require "stargate/kernel.rb"
+require_relative "random.rb"
+require_relative "state.rb"
+require_relative "view.rb"
+require_relative "protocol.rb"
+require_relative "injection.rb"
+require_relative "clock.rb"
+require_relative "stability.rb"
+require_relative "time_travel.rb"
+require_relative "immunology.rb"
+require_relative "vigilante.rb"
+require_relative "diagnose.rb" 
+require_relative "avatar.rb"
+require_relative "ledger_keeper.rb"
+require_relative "deep_reflexion.rb"
+require_relative "kernel.rb"
 
 # Stargate Core: The Sovereign API
 # This is the single entry point for the Catalyst Runtime.
 # Law of Silence: Internal organs are hidden; only the interface speaks.
 module Stargate
   def self.initialize_context(args, heartbeat: false, mode: :standard)
+      # 0. Deep Reflexion: Safe Interceptor initialization (Sovereign bypass)
+      Stargate::DeepReflexion.patch!
+
       # 11. Sistema vivo: Sincronización continua de identidad.
       @args = args if args
       
       # DISPARADOR SOBERANO: 
-      # Si el script se re-ejecuta (toplevel call) mientras ya estamos activos, detectamos mutación.
+      # Si el script se re-ejecuta (toplevel call), detectamos si es un reset legítimo.
       if $stargate_active && args && !heartbeat
-         unless Vigilante.interrupted || $stargate_sanctioned_reset
+         is_reset = (args.state.tick_count == 0)
+         
+         unless Vigilante.interrupted || $stargate_sanctioned_reset || is_reset
             Vigilante.shout!(args, :unsanctioned_mutation, "Structural Mutation Detected: Script re-executed without Causal Intent.")
+            # Si es una mutación no sancionada, nos detenemos para proteger.
+            return
          end
          
-         # Limpiamos el flag de reset sancionado una vez usado
+         # Si es un reset o está sancionado, permitimos la re-inicialización
+         puts "🔄 Stargate: Re-inicializando contexto (Sancionado o Reset)."
          $stargate_sanctioned_reset = false
          Vigilante.install!(args)
          Stability.install!(args)
-         return
+         # No retornamos; dejamos que el flujo de bootstrap proceda para refrescar estados.
       end
 
       return if $stargate_active || @bootstrapping
